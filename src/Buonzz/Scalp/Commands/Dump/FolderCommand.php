@@ -5,6 +5,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Logger\ConsoleLogger;
+use Buonzz\Scalp\ScalpLogger;
 
 class FolderCommand extends Command
 {
@@ -13,33 +16,53 @@ class FolderCommand extends Command
         $this
             ->setName('dump:folder')
             ->setDescription('Accepts a folder then dump its structure as JSON')
-            ->addArgument(
-                'name',
-                InputArgument::OPTIONAL,
-                'Who do you want to greet?'
-            )
             ->addOption(
-               'yell',
-               null,
-               InputOption::VALUE_NONE,
-               'If set, the task will yell in uppercase letters'
-            )
-        ;
+                'folder-path',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'What is the absolute path to the folder?',
+                '.'
+            )->addOption(
+                'output-file',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'What file to dump this?',
+                'dump.json'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
-        if ($name) {
-            $text = 'Hello '.$name;
-        } else {
-            $text = 'Hello';
-        }
+        $text = '';
+        
+        $path = $input->getOption('folder-path');
+        $output_file = $input->getOption('output-file');
+        
+        $logger = new ConsoleLogger($output);
+        $slogger = new ScalpLogger($logger);
 
-        if ($input->getOption('yell')) {
-            $text = strtoupper($text);
+        if (!file_exists($path)) {
+            $text = "Error: ".$path ." <-- cant find the specified folder";        
+            throw new \Exception($text);
         }
+        else
+        {
+            $finder = new Finder();
+            $files = $finder->files()->in($path);
+            
+            $ar = array();
 
-        $output->writeln($text);
+            foreach($files as $file)
+            {
+                $ar[] = $file->getRealpath();
+                $slogger->info($file->getRealpath());
+            }
+
+            $text = json_encode($ar);
+            file_put_contents($output_file,$text);
+            $logger->info("Dump written on " . $output_file);
+        } 
+
+        $output->writeln("Dump written on " . $output_file);               
     }
 }

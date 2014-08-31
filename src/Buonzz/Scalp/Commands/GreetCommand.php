@@ -11,7 +11,7 @@ class GreetCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('dump:greet')
+            ->setName('me:greet')
             ->setDescription('Greet someone')
             ->addArgument(
                 'name',
