@@ -37,7 +37,7 @@ class Differ{
         return $this->runCommand($command);
     }
 
-    protected function compare($localRevision, $remoteRevision = null)
+    public function compare($localRevision = 'HEAD', $remoteRevision = null)
     {
         $tmpFile = tmpfile();
         $filesToUpload = array();
