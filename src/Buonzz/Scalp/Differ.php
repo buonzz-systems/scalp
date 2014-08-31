@@ -54,6 +54,8 @@ class Differ{
             $command = 'diff --name-status '.$remoteRevision.'... '.$localRevision;
         }
 
+        echo $command;
+        
         try {
             $output = $this->gitCommand($command);            
         } catch (Exception $e) {        
