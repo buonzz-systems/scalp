@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
+use Buonzz\Scalp\DirectoryParser;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Buonzz\Scalp\ScalpLogger;
 
@@ -46,18 +46,8 @@ class FolderCommand extends Command
             throw new \Exception($text);
         }
         else
-        {
-            $finder = new Finder();
-            $files = $finder->files()->in($path);
-            
-            $ar = array();
-
-            foreach($files as $file)
-            {
-                $ar[] = $file->getRealpath();
-                $slogger->info($file->getRealpath());
-            }
-
+        {           
+            $ar = DirectoryParser::directoryToArray($path);
             $text = json_encode($ar);
             file_put_contents($output_file,$text);
             $logger->info("Dump written on " . $output_file);
