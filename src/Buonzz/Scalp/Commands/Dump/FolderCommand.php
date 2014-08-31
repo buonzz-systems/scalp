@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Buonzz\Scalp\DirectoryParser;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Buonzz\Scalp\ScalpLogger;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class FolderCommand extends Command
 {
@@ -41,18 +42,26 @@ class FolderCommand extends Command
         $logger = new ConsoleLogger($output);
         $slogger = new ScalpLogger($logger);
 
+        $progress = new ProgressBar($output);        
+
         if (!file_exists($path)) {
             $text = "Error: ".$path ." <-- cant find the specified folder";        
             throw new \Exception($text);
         }
         else
-        {           
+        {
+            $progress->start();
+
             $ar = DirectoryParser::directoryToArray($path);
+            $progress->advance();
             $text = json_encode($ar);
+            $progress->advance();
             file_put_contents($output_file,$text);
+            $progress->advance();
+            $progress->finish();
             $logger->info("Dump written on " . $output_file);
         } 
 
-        $output->writeln("Dump written on " . $output_file);               
+        $output->writeln("\nDump written on " . $output_file);               
     }
 }
