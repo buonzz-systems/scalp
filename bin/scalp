@@ -29,8 +29,11 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 
 use Buonzz\Scalp\Commands\GreetCommand;
+use Buonzz\Scalp\Commands\Dump\FolderCommand;
+
 use Symfony\Component\Console\Application;
 
 $application = new Application("Scalp", "v1.0");
 $application->add(new GreetCommand);
+$application->add(new FolderCommand);
 $application->run();

@@ -1,4 +1,4 @@
-<?php namespace Buonzz\Scalp\Commands;
+<?php namespace Buonzz\Scalp\Commands\Dump;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -6,13 +6,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GreetCommand extends Command
+class FolderCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('dump:greet')
-            ->setDescription('Greet someone')
+            ->setName('dump:folder')
+            ->setDescription('Accepts a folder then dump its structure as JSON')
             ->addArgument(
                 'name',
                 InputArgument::OPTIONAL,
