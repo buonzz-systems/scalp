@@ -1,0 +1,22 @@
+{
+    "name": "buonzz/scalp",
+    "description": "Command line tool to Analyze and store your Media file's metadata",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Darwin Biler",
+            "email": "buonzz@gmail.com"
+        }
+    ],    
+    "require": {
+		"php": ">=5.3.28"
+    },
+	"require-dev": {       
+		"phpunit/phpunit": "3.7.*"
+    },
+	"autoload": {
+        "psr-0": {
+            "Buonzz\\Scalp\\": "src/"
+        }
+    }
+}
