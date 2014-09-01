@@ -37,7 +37,7 @@ class Differ{
         return $this->runCommand($command);
     }
 
-    public function compare($localRevision = 'HEAD', $remoteRevision = null)
+    public function compare($remoteRevision = null, $localRevision = 'HEAD')
     {
         $tmpFile = tmpfile();
         $filesToUpload = array();
@@ -52,9 +52,7 @@ class Differ{
         } else {
             // Question: should there really be a space after ... here?  Is that valid?
             $command = 'diff --name-status '.$remoteRevision.'... '.$localRevision;
-        }
-
-        echo $command;
+        }        
         
         try {
             $output = $this->gitCommand($command);            
