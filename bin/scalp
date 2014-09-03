@@ -33,7 +33,7 @@ use Buonzz\Scalp\Commands\Dump\FolderCommand;
 
 use Symfony\Component\Console\Application;
 
-$application = new Application("Scalp", "v1.0");
+$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v1.0");
 $application->add(new GreetCommand);
 $application->add(new FolderCommand);
 $application->run();
