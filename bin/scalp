@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+error_reporting(0);
+
 $files = array(
   __DIR__ . '/../../vendor/autoload.php',
   __DIR__ . '/../../../../autoload.php',

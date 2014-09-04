@@ -58,8 +58,8 @@ class VideoCommand extends Command
 
             $id3 = new \getID3;
             $fileinfo = $id3->analyze($path);
-            echo $path;
-            file_put_contents($output_file,json_encode($fileinfo));
+
+            file_put_contents($output_file, \ForceUTF8\Encoding::fixUTF8(json_encode($fileinfo)));
             $progress->advance();
             $progress->finish();
             $logger->info("metadata written on " . $output_file);
