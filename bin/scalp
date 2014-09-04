@@ -30,10 +30,12 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 use Buonzz\Scalp\Commands\GreetCommand;
 use Buonzz\Scalp\Commands\Dump\FolderCommand;
+use Buonzz\Scalp\Commands\Extract\VideoCommand;
 
 use Symfony\Component\Console\Application;
 
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v1.0");
 $application->add(new GreetCommand);
 $application->add(new FolderCommand);
+$application->add(new VideoCommand);
 $application->run();
