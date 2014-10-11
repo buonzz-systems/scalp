@@ -3,4 +3,6 @@
 composer.lock
 /data/*.js
 /data/*.sql
+/data/*.json
+/data/*.txt
 
