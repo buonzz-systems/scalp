@@ -27,9 +27,16 @@ The above command specifies the "folder-path" as the folder that contains the im
 #### Extract the ID3 Tags and Metadata of a file and dump it into a JSON file
 
 
-    bin/scalp extract:video --file-path=/your/movies/filename_dvd.avi  --output-file=data/output.json
+    bin/scalp export:mongodb --folder-path=/my/videos --output-file=data/myfiles.js --database=mymedia --collection=myfiles
 
 The above command specifies the "file-path" as the file that contains the image or video to analyze. The "output-file" will contain the output as a JSON file.
+The "database" is the name of the MongoDB database you want to import the data into. While the "collection" is the table inside the database that wherein the things will gonna be inserted.
+
+##### Exporting the output data into MongoDB
+
+You can then use the resulting file output to load the data into your MongoDB server. For example, to load it in the local MongoDB server, just use:
+
+    mongo localhost:27017/mymedia data/myfiles.js
 
 
 
