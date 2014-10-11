@@ -28,7 +28,7 @@ class FolderCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'What file to dump this?',
-                'dump.json'
+                'data/dump.json'
             );
     }
 

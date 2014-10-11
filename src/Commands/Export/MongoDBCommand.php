@@ -29,7 +29,7 @@ class MongoDBCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'What file to dump this?',
-                'mongodb_dump.js'
+                'data/mongodb_dump.js'
             );
     }
 

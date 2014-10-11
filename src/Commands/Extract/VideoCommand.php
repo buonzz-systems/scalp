@@ -28,7 +28,7 @@ class VideoCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'What file to dump this?',
-                'video-dump.json'
+                'data/video-dump.json'
             );
     }
 
