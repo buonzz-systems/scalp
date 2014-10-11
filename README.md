@@ -24,7 +24,7 @@ To use scalp, just require the buonzz/scalp in your composer project
 
 The above command specifies the "folder-path" as the folder that contains the images and videos to read. The "output-file" will contain the output as a JSON file.  The dump:folder command retrieves the directory and file listing of the folder-path and output it as a tree of JSON objects.
 
-#### Dump the folder and files structure as a JSON file
+#### Extract the ID3 Tags and Metadata of a file and dump it into a JSON file
 
 
     bin/scalp extract:video --file-path=/your/movies/filename_dvd.avi  --output-file=data/output.json
