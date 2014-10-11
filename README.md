@@ -32,4 +32,11 @@ The above command specifies the "folder-path" as the folder that contains the im
 The above command specifies the "file-path" as the file that contains the image or video to analyze. The "output-file" will contain the output as a JSON file.
 
 
+#### Extract the ID3 Tags and Metadata of a file and dump it into a MongoDB script file
+
+
+    bin/scalp export:mongodb --folder-path=/my/videos --output-file=data/mongodata.js
+
+You can then use the resulting file to import the data ito your MongoDB database.
+
 
