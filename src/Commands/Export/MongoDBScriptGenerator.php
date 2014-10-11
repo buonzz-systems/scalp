@@ -31,7 +31,7 @@ class MongoDBScriptGenerator{
 
              if (is_dir($path . DIRECTORY_SEPARATOR . $value)) 
              { 
-                $result .= $this->array_to_script($dir . DIRECTORY_SEPARATOR . $value); 
+                $result .= $this->array_to_script($path . DIRECTORY_SEPARATOR . $value); 
              } 
              else 
              { 
