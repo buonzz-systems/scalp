@@ -1,3 +1,6 @@
 /vendor/
 /docs/
 composer.lock
+/data/*.js
+/data/*.sql
+

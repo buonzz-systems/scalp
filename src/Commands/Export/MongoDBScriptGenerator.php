@@ -44,10 +44,15 @@ class MongoDBScriptGenerator{
     }
 
     private function get_meta($item, $path){
-    	$output = 'db.'.$this->collection.'.insert({';
-		$output .= '"file_name":"'. $item.'",';		
-		$output .= '"path":"'. $path.'"';
-		$output .=  "});\r\n";
+    	$output = '';
+    	if(file_exists($path.$item) && is_file($path.$item))
+    	{
+	    	$output = 'db.'.$this->collection.'.insert({';
+			$output .= '"file_name":"'. $item.'",';
+			$output .= '"file_size":"'. filesize($path.$item) .'",';
+			$output .= '"path":"'. $path.'"';
+			$output .=  "});\r\n";
+		}
 		return $output;
     }
 }
