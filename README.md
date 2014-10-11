@@ -39,4 +39,11 @@ You can then use the resulting file output to load the data into your MongoDB se
     mongo localhost:27017/mymedia data/myfiles.js
 
 
+#### Extract the ID3 Tags and Metadata of a file and dump it into a MongoDB script file
+
+
+    bin/scalp export:mongodb --folder-path=/my/videos --output-file=data/mongodata.js
+
+You can then use the resulting file to import the data ito your MongoDB database.
+
 
