@@ -5,7 +5,7 @@
     "authors": [
         {
             "name": "Darwin Biler",
-            "email": "buonzz@gmail.com"
+            "email": "darwin@buonzz.com"
         }
     ],    
     "require": {
@@ -20,7 +20,7 @@
 		"phpunit/phpunit": "3.7.*"
     },
 	"autoload": {
-        "psr-0": {
+        "psr-4": {
             "Buonzz\\Scalp\\": "src/"
         }
     },
