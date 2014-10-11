@@ -1,29 +1,36 @@
 <?php namespace Buonzz\Scalp\Commands\Export;
 
 use Buonzz\Scalp\ExcludedContents;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class MongoDBScriptGenerator{
 	private $path;
 	private $output;
 	private $db;
 	private $collection;
+  private $output_file;
 
-	public function __construct($path, $db, $collection){
+	public function __construct($path, $db, $collection, $output_file){
 		$this->path = $path;		
 		$this->db = $db;
 		$this->collection = $collection;
+    $this->output_file = $output_file;
 	}
 
-	public function generate(){		
-		$this->output = "conn = new Mongo(); \r\n";
-		$this->output .= "db = conn.getDB('".$this->db."'); \r\n";
-		$this->output .= $this->array_to_script($this->path);
-		return $this->output;
+	public function generate($progressbar){
+    $progressbar->setMessage('Export process started');
+
+		$output = "conn = new Mongo(); \r\n";    
+		$output .= "db = conn.getDB('".$this->db."'); \r\n";
+		file_put_contents($this->output_file,$output);
+    $progressbar->setMessage('analyzing files');
+    $this->array_to_script($this->path, $progressbar);
 	}
 
-	private function array_to_script($path){		
-	   $result = ''; 
-       $cdir = scandir($path); 
+	private function array_to_script($path, $progressbar){
+ 
+     $result = ''; 
+     $cdir = scandir($path); 
        foreach ($cdir as $key => $value) 
        { 
           if (!in_array($value,ExcludedContents::get())) 
@@ -31,15 +38,17 @@ class MongoDBScriptGenerator{
 
              if (is_dir($path . DIRECTORY_SEPARATOR . $value)) 
              { 
-                $result .= $this->array_to_script($path . DIRECTORY_SEPARATOR . $value); 
+                $this->array_to_script($path . DIRECTORY_SEPARATOR . $value, $progressbar); 
              } 
              else 
              { 
-                $result .= $this->get_meta($value, $path . DIRECTORY_SEPARATOR); 
-             } 
+                $this->get_meta($value, $path . DIRECTORY_SEPARATOR);
+                $progressbar->setMessage($path . DIRECTORY_SEPARATOR. $value); 
+             }
+             $progressbar->advance();
           } 
-       } 
-           
+       }       
+             
        return $result; 
     }
 
@@ -53,11 +62,12 @@ class MongoDBScriptGenerator{
     		$metadata = \ForceUTF8\Encoding::fixUTF8(json_encode($fileinfo));
 
 	    	$output = 'db.'.$this->collection.'.insert({';
-			$output .= '"file_name":"'. $item.'",';
-			$output .= '"metadata":'. $metadata .',';
-			$output .= '"path":"'. $path.'"';
-			$output .=  "});\r\n";
-		}
-		return $output;
+  			$output .= '"file_name":"'. $item.'",';
+  			$output .= '"metadata":'. $metadata .',';
+  			$output .= '"path":"'. $path.'"';
+  			$output .=  "});\r\n";
+        file_put_contents($this->output_file,$output, FILE_APPEND);
+  		}
+  		return $output;
     }
 }

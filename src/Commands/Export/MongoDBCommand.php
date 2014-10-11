@@ -52,12 +52,11 @@ class MongoDBCommand extends Command
         $path = $input->getOption('folder-path');
         $output_file = $input->getOption('output-file');
         $database = $input->getOption('database');
-        $collection = $input->getOption('collection');
-
-        $logger = new ConsoleLogger($output);
-        $slogger = new ScalpLogger($logger);
+        $collection = $input->getOption('collection');       
 
         $progress = new ProgressBar($output);        
+        $progress->setFormat('very_verbose');
+        $progress->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s% %memory:6s% %message%');
 
         if (!file_exists($path)) {
             $text = "Error: ".$path ." <-- cant find the specified folder";        
@@ -65,12 +64,13 @@ class MongoDBCommand extends Command
         }
         else
         {
-            $gen = new MongoDBScriptGenerator($path, $database, $collection);
             $progress->start();            
-            $progress->advance();
-            $data_output = $gen->generate();
-            file_put_contents($output_file,$data_output);
-            $progress->finish();           
+            $progress->advance();      
+
+            $gen = new MongoDBScriptGenerator($path, $database, $collection,$output_file);           
+            $gen->generate($progress); 
+
+            $progress->finish();                          
         } 
 
         $output->writeln("\nDump written on " . $output_file);               
