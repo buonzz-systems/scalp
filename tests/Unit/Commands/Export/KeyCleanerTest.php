@@ -12,18 +12,14 @@ class KeyCleanerTest extends PHPUnit_Framework_TestCase{
   public function testClean(){
       $var = new KeyCleaner;
 
-      echo KeyCleaner::clean("Thumbnail.FileType") ."\r\n";
-      echo KeyCleaner::clean("Thumbnail.MimeType") ."\r\n";
-      echo KeyCleaner::clean("[Content_Types].xml") ."\r\n";
-      echo KeyCleaner::clean(".rels");
-
-
-      $this->assertTrue(KeyCleaner::clean("Thumbnail.FileType") == 'Thumbnail_FileType');
-      $this->assertTrue(KeyCleaner::clean("Thumbnail.MimeType") == 'Thumbnail_MimeType');
-      $this->assertTrue(KeyCleaner::clean("[Content_Types].xml") == 'Content_Types_xml');
-      $this->assertTrue(KeyCleaner::clean(".rels") == '_rels');
-
-
+      $test_json = array('Thumbnail.FileType'=> '1',
+                         'Thumbnail.MimeType'=> '1',
+                         '[Content_Types].xml'=> '1',
+                         '.rels' => 1);
+      
+      $this->assertTrue(KeyCleaner::clean(
+        json_encode($test_json)) == 
+      '{"Thumbnail_FileType":"1","Thumbnail_MimeType":"1","[Content_Types]_xml":"1","_rels":1}');
       unset($var);
   }
 }
