@@ -13,6 +13,7 @@ class KeyCleanerTest extends PHPUnit_Framework_TestCase{
       $var = new KeyCleaner;
       $this->assertTrue(KeyCleaner::clean("Thumbnail.FileType") == 'Thumbnail-FileType');
       $this->assertTrue(KeyCleaner::clean("Thumbnail.MimeType") == 'Thumbnail-MimeType');
+      $this->assertTrue(KeyCleaner::clean("[Content_Types].xml") == 'Content_Types_xml');
       unset($var);
   }
 }

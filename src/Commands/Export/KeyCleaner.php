@@ -6,7 +6,7 @@ class KeyCleaner{
       
       $patterns[0] = '/Thumbnail.FileType/';
       $patterns[1] = '/Thumbnail.MimeType/';
-      $patterns[2] = '/[Content_Types].xml/'; 
+      $patterns[2] = '/\[Content_Types\]\.xml/'; 
            
 
       $replacements = array();
