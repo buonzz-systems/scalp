@@ -30,5 +30,6 @@
             "type": "vcs",
             "url": "https://github.com/neitanod/forceutf8"
         }
-    ]
+    ],
+    "minimum-stability": "dev"
 }
