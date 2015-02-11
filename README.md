@@ -8,7 +8,7 @@ Install
 
 You can install scalp globally in your machine:
 
-     composer global require 'buonzz/scalp=1.*'
+     composer global require 'buonzz/scalp=dev-master'
 
 Simply add this directory to your PATH in your ~/.bash_profile (or ~/.bashrc) like this:
 
