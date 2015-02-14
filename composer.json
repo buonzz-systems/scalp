@@ -11,7 +11,7 @@
     ],    
     "require": {
 		"php": ">=5.3.28",
-        "symfony/console": "2.5.3",
+        "symfony/console": "2.*",
         "symfony/finder": "2.3.*",
         "psr/log":"*",
         "james-heinrich/getid3": "1.9.*"
