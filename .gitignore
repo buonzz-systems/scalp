@@ -5,4 +5,4 @@ composer.lock
 /data/*.sql
 /data/*.json
 /data/*.txt
-
+.DS_Store
