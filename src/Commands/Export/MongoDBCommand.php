@@ -56,7 +56,7 @@ class MongoDBCommand extends Command
 
         $progress = new ProgressBar($output);        
         $progress->setFormat('very_verbose');
-        $progress->setFormat("files:%current% [%bar%] %elapsed:6s% elapsed  Mem:%memory:6s%  Current: %message%");
+     
 
         if (!file_exists($path)) {
             $text = "Error: ".$path ." <-- cant find the specified folder";        

@@ -18,12 +18,11 @@ class MongoDBScriptGenerator{
 	}
 
 	public function generate($progressbar){
-    $progressbar->setMessage('Export process started');
 
 		$output = "conn = new Mongo(); \r\n";    
 		$output .= "db = conn.getDB('".$this->db."'); \r\n";
 		file_put_contents($this->output_file,$output);
-    $progressbar->setMessage('analyzing files');
+   
     $this->array_to_script($this->path, $progressbar);
 	}
 
@@ -43,9 +42,9 @@ class MongoDBScriptGenerator{
              else 
              { 
                 $this->get_meta($value, $path . DIRECTORY_SEPARATOR);
-                $progressbar->setMessage($path . DIRECTORY_SEPARATOR. $value); 
+             
              }
-             $progressbar->advance();
+        
           } 
        }       
              
@@ -61,10 +60,6 @@ class MongoDBScriptGenerator{
     	{
     		$fileinfo = $id3->analyze($path.$item);
         
-    		$metadata = KeyCleaner::clean(
-                          \ForceUTF8\Encoding::fixUTF8(
-                           json_encode($fileinfo)
-                          ));
 
 	    	$output = 'db.'.$this->collection.'.insert({';
   			$output .= '"file_name":"'. $item.'",';
