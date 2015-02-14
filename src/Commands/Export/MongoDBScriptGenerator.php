@@ -60,9 +60,9 @@ class MongoDBScriptGenerator{
     	{
     		$fileinfo = $id3->analyze($path.$item);
 
-			$metadata->filesize = $fileinfo->metadata->filesize;
-			$metadata->mime_type = $fileinfo->mime_type;
-			$metadata->encoding = $fileinfo->encoding;
+			$metadata->filesize = $fileinfo['metadata']['filesize'];
+			$metadata->mime_type = $fileinfo['mime_type'];
+			$metadata->encoding = $fileinfo['encoding'];
 			
 				
 	    	$output = 'db.'.$this->collection.'.insert({';
