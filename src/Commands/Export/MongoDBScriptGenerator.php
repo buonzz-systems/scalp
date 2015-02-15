@@ -65,6 +65,7 @@ class MongoDBScriptGenerator{
 					
 	    	$output = 'db.'.$this->collection.'.insert({';
   			$output .= '"file_name":"'. $item.'",';
+  			$output .= '"file_last_modified":"'. filemtime($path.$item) .'",';
   			$output .= '"metadata":'. $mdata .',';
   			$output .= '"path":"'. $path.'"';
   			$output .=  "});\r\n";
