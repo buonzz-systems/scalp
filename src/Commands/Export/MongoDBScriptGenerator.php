@@ -52,6 +52,7 @@ class MongoDBScriptGenerator{
     }
 
     private function get_meta($item, $path){
+    	
     	$output = '';
     	$id3 = new \getID3;  
 
@@ -60,19 +61,16 @@ class MongoDBScriptGenerator{
     	{
     		$fileinfo = $id3->analyze($path.$item);
 
-			$metadata->filesize = $fileinfo['metadata']['filesize'];
-			$metadata->mime_type = $fileinfo['mime_type'];
-			$metadata->encoding = $fileinfo['encoding'];
-			
-			$mdata = json_encode($metadata);
+			$mdata = FieldMapper::map($fileinfo);
 					
 	    	$output = 'db.'.$this->collection.'.insert({';
   			$output .= '"file_name":"'. $item.'",';
   			$output .= '"metadata":'. $mdata .',';
   			$output .= '"path":"'. $path.'"';
   			$output .=  "});\r\n";
-        file_put_contents($this->output_file,$output, FILE_APPEND);
+        	file_put_contents($this->output_file,$output, FILE_APPEND);
   		}
+
   		return $output;
     }
 }
