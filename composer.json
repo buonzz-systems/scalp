@@ -15,7 +15,8 @@
         "symfony/finder": "2.3.*",
         "psr/log":"*",
         "james-heinrich/getid3": "1.9.*",
-        "elasticsearch/elasticsearch": "~2.0"
+        "elasticsearch/elasticsearch": "~2.0",
+        "symfony/yaml": "^3.0"
     },
 	"autoload": {
         "psr-4": {

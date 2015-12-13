@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;
-// use Elasticsearch\ClientBuilder;
+use Elasticsearch\ClientBuilder;
 
 class ElasticCommand extends Command
 {
@@ -25,15 +25,13 @@ class ElasticCommand extends Command
             $output->writeln("<error>scalp.yaml not found in current directory. Please create one first</error>");
             exit();
         }
+        
 
         $yaml = new Parser();
-        // $client = ClientBuilder::create()->build();
+         $client = ClientBuilder::create()->build();
 
-        try {
-            $config = $yaml->parse(file_get_contents('./scalp.yaml'));
-        } catch (ParseException $e) {
-            $output->writeln("Unable to parse the YAML string: %s", $e->getMessage());
-        }
+        $config = $yaml->parse(file_get_contents('./scalp.yaml'));
+       
 
 
         $output->writeln("Hello: " . $config["ES_HOST"]);               
