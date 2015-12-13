@@ -36,6 +36,7 @@ use Buonzz\Scalp\Commands\GreetCommand;
 use Buonzz\Scalp\Commands\Dump\FolderCommand;
 use Buonzz\Scalp\Commands\Extract\VideoCommand;
 use Buonzz\Scalp\Commands\Export\MongoDBCommand;
+use Buonzz\Scalp\Commands\Import\ElasticCommand;
 
 use Symfony\Component\Console\Application;
 
@@ -44,4 +45,5 @@ $application->add(new GreetCommand);
 $application->add(new FolderCommand);
 $application->add(new VideoCommand);
 $application->add(new MongoDBCommand);
+$application->add(new ElasticCommand);
 $application->run();

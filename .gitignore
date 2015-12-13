@@ -6,3 +6,4 @@ composer.lock
 /data/*.json
 /data/*.txt
 .DS_Store
+bin/*.yaml
