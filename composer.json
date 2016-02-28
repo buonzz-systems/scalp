@@ -6,29 +6,20 @@
     "authors": [
         {
             "name": "Darwin Biler",
-            "email": "darwin@buonzz.com"
+            "email": "buonzz@gmail.com"
         }
     ],    
     "require": {
-		"php": ">=5.3.28",
-        "symfony/console": "2.*",
-        "symfony/finder": "2.3.*",
-        "psr/log":"*",
+		"php": ">=5.4",
+        "vlucas/phpdotenv": "^2.2",
+        "symfony/console": "^3.0",
         "james-heinrich/getid3": "1.9.*",
-        "elasticsearch/elasticsearch": "~2.0",
-        "symfony/yaml": "^3.0"
+        "elasticsearch/elasticsearch": "2.*"
     },
 	"autoload": {
         "psr-4": {
             "Buonzz\\Scalp\\": "src/"
         }
     },
-    "bin": ["bin/scalp"],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/neitanod/forceutf8"
-        }
-    ],
-    "minimum-stability": "dev"
+    "bin": ["bin/scalp"]
 }
