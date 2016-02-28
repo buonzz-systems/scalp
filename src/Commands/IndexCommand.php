@@ -6,12 +6,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Elasticsearch\ClientBuilder;
+
 class IndexCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('scalp:index')
+            ->setName('es:index')
             ->setDescription('Read and index a certain directory to ElasticSearch')
             ->addArgument(
                 'folder_path',
@@ -21,8 +23,19 @@ class IndexCommand extends Command
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
-    {   
-        $output->writeln("Initialiazing");
+    {
+        $client = ClientBuilder::create()->build();
+        $output->writeln("Initializing");
         $folder = $input->getArgument('folder_path');
+
+        $params = [
+            'index' => 'my_index',
+            'type' => 'my_type',
+            'id' => 'my_id',
+            'body' => ['testField' => 'abc']
+        ];
+
+        $response = $client->index($params);
+        print_r($response);
     }
 }
