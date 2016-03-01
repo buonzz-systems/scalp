@@ -36,8 +36,11 @@ class IndexCommand extends Command
 
 
         foreach($files as $file){
-            echo $analyzer->analyze($file->getPathname()) . "\n\n";
+            $output->writeln('Processing <comment>'. $file->getPathname() .' </comment>'); 
+            $analyzer->analyze($file->getPathname()) . "\n\n";
         }
+
+        $output->writeln("Success!");
 
     }
 }
