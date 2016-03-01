@@ -37,7 +37,21 @@ class IndexCommand extends Command
 
         foreach($files as $file){
             $output->writeln('Processing <comment>'. $file->getPathname() .' </comment>'); 
-            $analyzer->analyze($file->getPathname()) . "\n\n";
+            $metadata = $analyzer->analyze($file->getPathname());
+        
+            $params = [
+                'index' => 'scalp_media_files',
+                'type' => 'file',
+                'id' => md5($file->getPathname()),
+                'routing' => 'scalp',
+                'timestamp' => strtotime("-1d"),
+                'body' => $metadata
+            ];
+
+            $response = $client->index($params);
+
+            if($response['_shards']['failed'] !=0)
+                $output->writeln('<error>ERROR: '. $file->getPathname() . '</error>');
         }
 
         $output->writeln("Success!");

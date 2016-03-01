@@ -6,7 +6,7 @@ class Analyzer{
 	private $desired_properties = array('filesize','bitrate', 'fileformat', 'filename', 'mime_type', 'playtime_seconds', 'playtime_string', 'filepath', 'tags');
 
 
- public function analyze($filepath){
+ public function analyze($filepath, $json_output = FALSE){
 	 $getID3 = new \getID3;
 
     $fileInfo = $getID3->analyze($filepath);
@@ -28,9 +28,16 @@ class Analyzer{
     }
     
 
-    $data = json_encode($info);
-    if(strlen($data) <=0)
-        throw new \Exception(json_last_error_msg());
+    if($json_output)
+    {
+
+        $data = json_encode($info);
+        if(strlen($data) <=0)
+            throw new \Exception(json_last_error_msg());
+    }
+    else
+        $data = $info;
+
 
     return $data;
 
@@ -43,7 +50,28 @@ class Analyzer{
                     $item = utf8_encode($item);
             }
         });
+
+        $array = $this->fixArrayKey($array);
      
         return $array;
+    }
+
+    function fixArrayKey(&$arr)
+    {
+        $arr = array_combine(
+            array_map(
+                function ($str) {
+                    return str_replace(".", "_", $str);
+                },
+                array_keys($arr)
+            ),
+            array_values($arr)
+        );
+
+        foreach ($arr as $key => $val) {
+            if (is_array($val)) {
+                $this->fixArrayKey($arr[$key]);
+            }
+        }
     }
 }
