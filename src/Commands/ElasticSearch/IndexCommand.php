@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Elasticsearch\ClientBuilder;
+use Buonzz\Scalp\MediaFilesList;
+use Buonzz\Scalp\Analyzer;
 
 class IndexCommand extends Command
 {
@@ -26,16 +28,16 @@ class IndexCommand extends Command
     {
         $client = ClientBuilder::create()->build();
         $output->writeln("Initializing");
-        $folder = $input->getArgument('folder_path');
+        $folder_path = $input->getArgument('folder_path');
 
-        $params = [
-            'index' => 'my_index',
-            'type' => 'my_type',
-            'id' => 'my_id',
-            'body' => ['testField' => 'abc']
-        ];
+        $files = MediaFilesList::get($folder_path);
+        
+        $analyzer = new Analyzer();
 
-        $response = $client->index($params);
-        print_r($response);
+
+        foreach($files as $file){
+            echo $analyzer->analyze($file->getPathname()) . "\n\n";
+        }
+
     }
 }

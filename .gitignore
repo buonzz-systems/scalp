@@ -9,3 +9,4 @@ composer.lock
 bin/*.yaml
 *.mp4
 *.jpg
+*.json
