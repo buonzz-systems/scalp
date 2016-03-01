@@ -26,3 +26,16 @@ To use scalp, just require the buonzz/scalp in your composer project
   }
 }
 ```
+
+
+### Testing Indexed documents
+
+To show all indexes
+```
+curl 'localhost:9200/_cat/indices?v'
+```
+
+To list all documents
+```
+curl -XGET 'localhost:9200/scalp_media_files/_search?pretty=true&q=*:*'
+```
