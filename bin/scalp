@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-error_reporting(0);
+error_reporting(E_ALL);
 
 $files = array(
   __DIR__ . '/../../vendor/autoload.php',
@@ -32,10 +32,12 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 
 
-use Buonzz\Scalp\Commands\IndexCommand;
+use Buonzz\Scalp\Commands\ElasticSearch\IndexCommand;
+use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
 
 use Symfony\Component\Console\Application;
 
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v1.1");
 $application->add(new IndexCommand);
+$application->add(new AnalyzeCommand);
 $application->run();

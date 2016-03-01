@@ -1,4 +1,4 @@
-<?php namespace Buonzz\Scalp\Commands;
+<?php namespace Buonzz\Scalp\Commands\ElasticSearch;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
