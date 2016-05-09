@@ -10,3 +10,5 @@ bin/*.yaml
 *.mp4
 *.jpg
 *.json
+/dist/
+.env
