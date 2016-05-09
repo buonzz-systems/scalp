@@ -16,19 +16,13 @@ class IndexCommand extends Command
     {
         $this
             ->setName('es:index')
-            ->setDescription('Read and index a certain directory to ElasticSearch')
-            ->addArgument(
-                'folder_path',
-                InputArgument::OPTIONAL,
-                'Where is the files located?'
-            );
+            ->setDescription('Read and index a certain directory to ElasticSearch');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $client = ClientBuilder::create()->build();
         $output->writeln("Initializing");
-        $folder_path = $input->getArgument('folder_path');
 
         $files = MediaFilesList::get($folder_path);
         

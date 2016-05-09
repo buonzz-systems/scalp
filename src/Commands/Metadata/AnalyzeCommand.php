@@ -37,7 +37,7 @@ class AnalyzeCommand extends Command
         }
 
         $output->writeln("reading files from " . $source_folder);
-
+        $output->writeln("writing data to "  . $destination_folder);
         $files = MediaFilesList::get($source_folder);
         
         foreach($files as $k=>$file)
@@ -47,7 +47,10 @@ class AnalyzeCommand extends Command
 
             $filename = $destination_folder . "/" . $prefix. $file->getFilename() . ".json";
             file_put_contents($filename, $data);
+            $output->writeln('<comment>'. $file->getFilename() .  ' processed </comment>');
         }
+
+         $output->writeln("Success!");
     }
 
 }
