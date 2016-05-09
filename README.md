@@ -83,5 +83,5 @@ curl 'localhost:9200/_cat/indices?v'
 
 To list all documents
 ```
-curl -XGET 'localhost:9200/scalp_media_files/_search?pretty=true&q=*:*'
+curl -XGET 'localhost:9200/[your index name]/_search?pretty=true&q=*:*'
 ```
