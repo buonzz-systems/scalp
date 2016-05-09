@@ -68,8 +68,8 @@ class IndexCommand extends Command
             'index' => getenv('DB_NAME'),
             'body' => [
                 'settings' => [
-                    'number_of_shards' => 1,
-                    'number_of_replicas' => 1
+                    'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 1 ,
+                    'number_of_replicas' => getenv('DB_REPLICAS') ? getenv('DB_REPLICAS') : 1
                 ],
                 'mappings' => [
                     getenv('DOC_TYPE') => [
