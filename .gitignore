@@ -12,3 +12,4 @@ bin/*.yaml
 *.json
 /dist/
 .env
+logs/scalp.log

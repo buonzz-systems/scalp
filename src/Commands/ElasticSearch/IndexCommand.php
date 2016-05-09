@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Elasticsearch\ClientBuilder;
+use Monolog\Logger;
+
 use Buonzz\Scalp\MediaFilesList;
 use Buonzz\Scalp\Analyzer;
 
@@ -95,11 +97,15 @@ class IndexCommand extends Command
     }
 
     private function build_client(){
+
         $hosts = [
             getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT')
         ];
 
+        $logger = ClientBuilder::defaultLogger(getenv('LOG_FOLDER') .'/scalp.log', Logger::INFO);
+
         $client = ClientBuilder::create()   // Instantiate a new ClientBuilder
+                    ->setLogger($logger)    // set the logger
                     ->setHosts($hosts)      // Set the hosts
                     ->build();              // Build the client object
         return $client;
