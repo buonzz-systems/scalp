@@ -40,9 +40,6 @@ class IndexCommand extends Command
                 ],
                 'mappings' => [
                     getenv('DOC_TYPE') => [
-                        '_source' => [
-                            'enabled' => true
-                        ],
                         'properties' => [
                             'exif.ShutterSpeedValue' => [
                                 'type' => 'string'

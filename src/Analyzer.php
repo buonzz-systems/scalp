@@ -27,7 +27,7 @@ class Analyzer{
         if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']))
         {   
             $exif_data = array();
-            $exif_data['DateTimeDigitized'] = $fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized'];
+            $exif_data['DateTimeDigitized'] = strtotime($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
             $exif_data['ExposureTime'] = $fileInfo['jpg']['exif']['EXIF']['ExposureTime'];
             $exif_data['FNumber'] = $fileInfo['jpg']['exif']['EXIF']['FNumber'];
             $exif_data['ISOSpeedRatings'] = $fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings'];            
