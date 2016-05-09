@@ -34,8 +34,21 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 use Buonzz\Scalp\Commands\ElasticSearch\IndexCommand;
 use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
+use Dotenv\Dotenv;
 
 use Symfony\Component\Console\Application;
+
+
+try{
+  $dotenv = new Dotenv(getcwd());
+  $dotenv->load();
+}catch(\Dotenv\Exception\InvalidPathException $e)
+{
+  putenv('DB_HOSTNAME=localhost');
+  putenv('DB_NAME=metadata');
+  putenv('DB_USER=null');
+  putenv('DB_PASSWORD=null');
+}
 
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v1.1");
 $application->add(new IndexCommand);
