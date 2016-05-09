@@ -6,18 +6,24 @@ Command line tool to Analyze and store your Media file's metadata
 Install
 =======
 
+
+#### Global
+
 You can install scalp globally in your machine:
 
-     composer global require 'buonzz/scalp=dev-master'
+```
+composer global require 'buonzz/scalp=dev-master'
+```
 
 Simply add this directory to your PATH in your ~/.bash_profile (or ~/.bashrc) like this:
 
-     export PATH=~/.composer/vendor/bin:$PATH
+```
+export PATH=~/.composer/vendor/bin:$PATH
+```
 
-Usage
-=====
+#### Per-project
 
-To use scalp, just require the buonzz/scalp in your composer project
+just require the buonzz/scalp in your composer project
 
 ```
 {
@@ -26,6 +32,10 @@ To use scalp, just require the buonzz/scalp in your composer project
   }
 }
 ```
+
+Usage
+=====
+
 
 
 ### Testing Indexed documents
