@@ -26,7 +26,7 @@ class IndexCommand extends Command
 
         // connect
         $output->writeln("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
-        $client = ClientBuilder::create()->build();
+        $client = $this->build_client();
 
 
         // delete old index
@@ -92,5 +92,16 @@ class IndexCommand extends Command
         catch(\Elasticsearch\Common\Exceptions\Missing404Exception $e){
             ;
         }
+    }
+
+    private function build_client(){
+        $hosts = [
+            getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT')
+        ];
+
+        $client = ClientBuilder::create()   // Instantiate a new ClientBuilder
+                    ->setHosts($hosts)      // Set the hosts
+                    ->build();              // Build the client object
+        return $client;
     }
 }
