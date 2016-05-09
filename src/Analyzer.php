@@ -23,8 +23,13 @@ class Analyzer{
             $info['height'] = utf8_encode($fileInfo['video']['resolution_y']);
         }
 
-        if(isset($fileInfo['jpg']))
-            $info['exif'] = $this->utf8_converter($fileInfo['jpg']['exif']);
+        if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']))
+        {   
+             $info['exif'] = $this->utf8_converter($fileInfo['jpg']['exif']);
+             //var_dump($fileInfo['jpg']['exif']['EXIF']);
+             //die();
+        }
+
     }
 
     $info['date_indexed'] = time();

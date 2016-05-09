@@ -43,7 +43,7 @@ class AnalyzeCommand extends Command
         foreach($files as $k=>$file)
         {
             $data = $analyzer->analyze($file->getRealPath(),true);
-            $prefix = str_replace('/', '.', $file->getPath());
+            $prefix = str_replace('/', '.', $file->getPath()) .".";
 
             $filename = $destination_folder . "/" . $prefix. $file->getFilename() . ".json";
             file_put_contents($filename, $data);
