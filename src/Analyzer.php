@@ -12,6 +12,7 @@ class Analyzer{
     $fileInfo = $getID3->analyze($filepath);
 
     $info = array();
+    $info['last_modified'] = filemtime($filepath);
     
     foreach($this->desired_properties as $p)
     {
@@ -25,9 +26,16 @@ class Analyzer{
 
         if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']))
         {   
-             $info['exif'] = $this->utf8_converter($fileInfo['jpg']['exif']);
-             //var_dump($fileInfo['jpg']['exif']['EXIF']);
-             //die();
+            $exif_data = array();
+            $exif_data['DateTimeDigitized'] = $fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized'];
+            $exif_data['ExposureTime'] = $fileInfo['jpg']['exif']['EXIF']['ExposureTime'];
+            $exif_data['FNumber'] = $fileInfo['jpg']['exif']['EXIF']['FNumber'];
+            $exif_data['ISOSpeedRatings'] = $fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings'];            
+            $exif_data['ShutterSpeedValue'] = $fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue'];
+            $exif_data['ApertureValue'] = $fileInfo['jpg']['exif']['EXIF']['ApertureValue'];
+            $exif_data['FocalLength'] = $fileInfo['jpg']['exif']['EXIF']['FocalLength'];
+            
+            $info['exif'] = $exif_data;
         }
 
     }
