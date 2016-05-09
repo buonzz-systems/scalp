@@ -130,7 +130,7 @@ php scalp.phar
 Or to just install it globally:
 
 ```
-sudo mv scalp.phar  /usr/local/bin/scalp
+sudo mv dist/scalp.phar  /usr/local/bin/scalp
 chmod +x /usr/local/bin/scalp
 scalp -V
 ```
