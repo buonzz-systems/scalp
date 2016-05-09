@@ -22,30 +22,57 @@ class IndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $client = ClientBuilder::create()->build();
+
+
         $output->writeln("Initializing");
 
-        $files = MediaFilesList::get($folder_path);
+
+        $params = ['index' => getenv('DB_NAME')];
+        $response = $client->indices()->delete($params);
+
+
+        $mappings = [
+            'index' => getenv('DB_NAME'),
+            'body' => [
+                'settings' => [
+                    'number_of_shards' => 1,
+                    'number_of_replicas' => 1
+                ],
+                'mappings' => [
+                    getenv('DOC_TYPE') => [
+                        '_source' => [
+                            'enabled' => true
+                        ],
+                        'properties' => [
+                            'exif.ShutterSpeedValue' => [
+                                'type' => 'string'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $response = $client->indices()->create($mappings);
+
+
+        $files = MediaFilesList::get(getenv('INPUT_FOLDER'));
         
         $analyzer = new Analyzer();
-
 
         foreach($files as $file){
             $output->writeln('Processing <comment>'. $file->getPathname() .' </comment>'); 
             $metadata = $analyzer->analyze($file->getPathname());
         
             $params = [
-                'index' => 'scalp_media_files',
-                'type' => 'file',
-                'id' => md5($file->getPathname()),
-                'routing' => 'scalp',
+                'index' => getenv('DB_NAME'),
+                'type' => getenv('DOC_TYPE'),
                 'timestamp' => strtotime("-1d"),
                 'body' => $metadata
             ];
 
             $response = $client->index($params);
 
-            if($response['_shards']['failed'] !=0)
-                $output->writeln('<error>ERROR: '. $file->getPathname() . '</error>');
         }
 
         $output->writeln("Success!");
