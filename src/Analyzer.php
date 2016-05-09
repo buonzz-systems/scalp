@@ -26,6 +26,8 @@ class Analyzer{
         if(isset($fileInfo['jpg']))
             $info['exif'] = $this->utf8_converter($fileInfo['jpg']['exif']);
     }
+
+    $info['date_indexed'] = time();
     
 
     if($json_output)
