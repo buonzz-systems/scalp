@@ -21,36 +21,21 @@ class IndexCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        
+        $output->writeln("Initializing");
+
+        // connect
+        $output->writeln("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
         $client = ClientBuilder::create()->build();
 
 
-        $output->writeln("Initializing");
+        // delete old index
+        $output->writeln("deleting the old db: " . getenv('DB_NAME'));
+        $this->delete_db($client);
 
-
-        $params = ['index' => getenv('DB_NAME')];
-        $response = $client->indices()->delete($params);
-
-
-        $mappings = [
-            'index' => getenv('DB_NAME'),
-            'body' => [
-                'settings' => [
-                    'number_of_shards' => 1,
-                    'number_of_replicas' => 1
-                ],
-                'mappings' => [
-                    getenv('DOC_TYPE') => [
-                        'properties' => [
-                            'exif.ShutterSpeedValue' => [
-                                'type' => 'string'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        $response = $client->indices()->create($mappings);
+        // re-creating the db and mappings
+        $output->writeln("re-creating the db and mappings");
+        $response = $client->indices()->create($this->get_mappings());
 
 
         $files = MediaFilesList::get(getenv('INPUT_FOLDER'));
@@ -74,5 +59,38 @@ class IndexCommand extends Command
 
         $output->writeln("Success!");
 
+    }
+
+    private function  get_mappings(){
+         $mappings = [
+            'index' => getenv('DB_NAME'),
+            'body' => [
+                'settings' => [
+                    'number_of_shards' => 1,
+                    'number_of_replicas' => 1
+                ],
+                'mappings' => [
+                    getenv('DOC_TYPE') => [
+                        'properties' => [
+                            'exif.ShutterSpeedValue' => [
+                                'type' => 'string'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        return $mappings;
+    }
+
+    private function delete_db($client){
+        try{
+            $params = ['index' => getenv('DB_NAME')];
+            $response = $client->indices()->delete($params);
+        }
+        catch(\Elasticsearch\Common\Exceptions\Missing404Exception $e){
+            ;
+        }
     }
 }
