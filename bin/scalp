@@ -47,6 +47,11 @@ try{
   putenv('DB_NAME=metadata');
   putenv('DB_USER=null');
   putenv('DB_PASSWORD=null');
+  putenv('DOC_TYPE=files');
+  putenv('DB_PORT=9200');
+  putenv('INPUT_FOLDER=.');
+  putenv('OUTPUT_FOLDER=dist');
+  putenv('LOG_FOLDER=.');
 }
 
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v1.1");
