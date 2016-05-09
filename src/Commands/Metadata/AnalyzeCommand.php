@@ -21,9 +21,7 @@ class AnalyzeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-
         $analyzer = new Analyzer();
-        // $data = $analyzer->analyze($file, true);
 
         $source_folder = getenv('INPUT_FOLDER');
         $destination_folder = getenv('OUTPUT_FOLDER');
@@ -40,7 +38,14 @@ class AnalyzeCommand extends Command
 
         $output->writeln("reading files from " . $source_folder);
 
-        var_dump(MediaFilesList::get($source_folder));
+        $files = MediaFilesList::get($source_folder);
+        
+        foreach($files as $k=>$file)
+        {
+            $data = $analyzer->analyze($file->getRealPath(),true);
+            $filename = $destination_folder . "/" . $file->getFilename() . ".json";
+            file_put_contents($filename, $data);
+        }
     }
 
 }
