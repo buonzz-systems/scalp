@@ -6,8 +6,28 @@ Command line tool to Analyze and store your Media file's metadata
 Install
 =======
 
+It is very to install Scalp as a CLI utility:
 
-#### Global
+```
+wget http://downloads.buonzz.com/scalp.phar
+sudo mv scalp.phar  /usr/local/bin/scalp
+chmod +x /usr/local/bin/scalp
+```
+
+After this, scalp command is available anywhere in your computer. To check if the scalp is installed properly, just execute
+
+```
+scalp -V
+```
+
+This should output
+
+```
+Scalp Metadata Extraction Tool by Darwin Biler version v2
+```
+
+
+#### via Composer - Globally
 
 You can install scalp globally in your machine:
 
@@ -21,7 +41,7 @@ Simply add this directory to your PATH in your ~/.bash_profile (or ~/.bashrc) li
 export PATH=~/.composer/vendor/bin:$PATH
 ```
 
-#### Per-project
+#### via Composer - per-project
 
 just require the buonzz/scalp in your composer project
 
