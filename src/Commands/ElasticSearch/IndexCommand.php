@@ -98,9 +98,16 @@ class IndexCommand extends Command
 
     private function build_client(){
 
-        $hosts = [
-            getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT')
-        ];
+
+        $hosts = array();
+
+        if (getenv('DB_USERNAME') != 'null' || getenv('DB_PASSWORD') != 'null') {
+           $hosts[] = 'http://' . getenv('DB_USERNAME') . ":" . getenv('DB_PASSWORD') .'@' .getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
+        }
+        else
+        {
+           $hosts[] = 'http://' .  getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
+        }
 
         $logger = ClientBuilder::defaultLogger(getenv('LOG_FOLDER') .'/scalp.log', Logger::INFO);
 
