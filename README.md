@@ -6,10 +6,18 @@ Command line tool to Analyze and store your Media file's metadata
 Install
 =======
 
-It is very to install Scalp as a CLI utility:
-
+It is very easy to install Scalp as a CLI utility:
+<br/>
+via wget
 ```
 wget http://downloads.buonzz.com/scalp.phar
+sudo mv scalp.phar  /usr/local/bin/scalp
+chmod +x /usr/local/bin/scalp
+```
+via curl
+
+```
+curl -o scalp.phar 'http://downloads.buonzz.com/scalp.phar'
 sudo mv scalp.phar  /usr/local/bin/scalp
 chmod +x /usr/local/bin/scalp
 ```
