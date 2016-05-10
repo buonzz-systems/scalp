@@ -11,28 +11,73 @@ class Analyzer{
 
     $fileInfo = $getID3->analyze($filepath);
 
+    
     $info = array();
+    
+    // common file system info
     $info['last_modified'] = date("c",filemtime($filepath));
     $info['last_accessed'] = date("c",fileatime($filepath));
+    $info['file_permissions'] = substr(sprintf('%o', fileperms($filepath)), -4);
+    $info['date_indexed'] = date("c",time());
 
+    // turn the path into tags
+    $info['path_tags'] = $this->path_to_tags($filepath, $fileInfo['filename']); 
+
+
+    // dynamic properties
     foreach($this->desired_properties as $p)
     {
         if(isset($fileInfo[$p]))
             $info[$p] = utf8_encode($fileInfo[$p]);
 
-        if(isset($fileInfo['video'])){
+    }
+
+    // jpg-related metadata
+    $info['exif'] = $this->extract_jpg($fileInfo);
+
+
+    // video-specific meta
+    if(isset($fileInfo['video'])){
             $info['width'] = utf8_encode($fileInfo['video']['resolution_x']);
             $info['height'] = utf8_encode($fileInfo['video']['resolution_y']);
-        }
+    }
+    
 
+    if($json_output)
+    {
+
+        $data = json_encode($info);
+        if(strlen($data) <=0)
+            throw new \Exception(json_last_error_msg());
+    }
+    else
+        $data = $info;
+
+
+    return $data;
+
+   } // analyze
+
+
+   function path_to_tags($path, $filename){
+       $tmp =  explode("/", $path);
+       return array_values(array_diff($tmp, array($filename, '')));
+   }
+
+   function extract_jpg($fileInfo){
+
+     $exif_data = array();
         if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']) && isset($fileInfo['jpg']['exif']['EXIF']))
         {   
-            $exif_data = array();
+    
 
             if(isset($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']))
             {
-                $t = intval($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
-                $exif_data['DateTimeDigitized'] = date("c",$t);
+
+                $tmp = strtotime($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
+                
+                if($tmp !== FALSE)
+                    $exif_data['DateTimeDigitized'] = date("c",$tmp);
             }
 
             if(isset($fileInfo['jpg']['exif']['EXIF']['ExposureTime']))
@@ -53,28 +98,11 @@ class Analyzer{
             if(isset($fileInfo['jpg']['exif']['EXIF']['FocalLength']))
                 $exif_data['FocalLength'] =  $fileInfo['jpg']['exif']['EXIF']['FocalLength'];
             
-            $info['exif'] = $exif_data;
         }
 
-    }
+        return $exif_data;
 
-    $info['date_indexed'] = date("c",time());
-    
-
-    if($json_output)
-    {
-
-        $data = json_encode($info);
-        if(strlen($data) <=0)
-            throw new \Exception(json_last_error_msg());
-    }
-    else
-        $data = $info;
-
-
-    return $data;
-
-   }
+   } // extract jpg
 
    function utf8_converter($array)
     {
