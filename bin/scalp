@@ -51,10 +51,12 @@ try{
   putenv('DB_PORT=9200');
   putenv('INPUT_FOLDER=.');
   putenv('OUTPUT_FOLDER=dist');
-  putenv('LOG_FOLDER=.');
+  putenv('LOG_FOLDER=./');
+  putenv('DB_SHARDS=1');
+  putenv('DB_REPLICAS=1');
 }
 
-$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v1.1");
+$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2");
 $application->add(new IndexCommand);
 $application->add(new AnalyzeCommand);
 $application->run();

@@ -64,24 +64,24 @@ class IndexCommand extends Command
     }
 
     private function  get_mappings(){
-         $mappings = [
+         $mappings = array(
             'index' => getenv('DB_NAME'),
-            'body' => [
-                'settings' => [
+            'body' => array(
+                'settings' => array(
                     'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 1 ,
                     'number_of_replicas' => getenv('DB_REPLICAS') ? getenv('DB_REPLICAS') : 1
-                ],
-                'mappings' => [
-                    getenv('DOC_TYPE') => [
-                        'properties' => [
-                            'exif.ShutterSpeedValue' => [
+                ),
+                'mappings' => array(
+                    getenv('DOC_TYPE') => array(
+                        'properties' => array(
+                            'exif.ShutterSpeedValue' => array(
                                 'type' => 'string'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
+                            )
+                        )
+                    )
+                )
+            )
+        );
 
         return $mappings;
     }
