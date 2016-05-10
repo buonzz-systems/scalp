@@ -26,29 +26,30 @@ class IndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
+        $output->writeln("Initializing");
+
         $progress = new ProgressBar($output);
         $progress->setFormat("files: %current% [%bar%] %elapsed:6s% %memory:6s% - %message%\n");
-        $progress->start();
-
-        $progress->setMessage("Initializing");
 
         // connect
-        $progress->setMessage("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
+        $output->writeln("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
         $client = $this->build_client();
 
 
         // delete old index
-        $progress->setMessage("removing the current db to avoid possible duplicates : " . $this->build_db_name());
+        $output->writeln("removing the current db to avoid possible duplicates : " . $this->build_db_name());
         $this->delete_db($client);
 
         // re-creating the db and mappings
-        $progress->setMessage("re-creating the db and mappings");
+        $output->writeln("re-creating the db and mappings");
         $response = $client->indices()->create($this->get_mappings());
 
 
         $files = MediaFilesList::get(getenv('INPUT_FOLDER'));
         
         $analyzer = new Analyzer();
+
+        $progress->start();
 
         foreach($files as $file){
             $progress->setMessage('Processing <comment>'. $file->getPathname() .' </comment>');
@@ -117,7 +118,9 @@ class IndexCommand extends Command
            $hosts[] = 'http://' .  getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
         }
 
-        $logger = ClientBuilder::defaultLogger(getenv('LOG_FOLDER') .'/scalp.log', Logger::INFO);
+        $log_filename = '/scalp-'. date('Y.m.d.H.i'). '.log';
+
+        $logger = ClientBuilder::defaultLogger(getenv('LOG_FOLDER') . $log_filename, Logger::INFO);
 
         $client = ClientBuilder::create()   // Instantiate a new ClientBuilder
                     ->setLogger($logger)    // set the logger

@@ -13,3 +13,4 @@ bin/*.yaml
 .env
 logs/scalp.log
 scalp.log
+*.log
