@@ -6,7 +6,7 @@ Command line tool to Analyze and store your Media file's metadata
 Install
 =======
 
-It is very to install Scalp as a CLI utility:
+It is very easy to install Scalp as a CLI utility:
 <br/>
 via wget
 ```
