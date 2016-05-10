@@ -38,22 +38,37 @@ use Dotenv\Dotenv;
 use Symfony\Component\Console\Application;
 
 
+
+// defuaults
+$config_items = array('DB_HOSTNAME' => 'localhost', 
+                        'DB_NAME' => 'metadata',
+                        'DB_USER' => 'null',
+                        'DB_USER' => 'null',
+                        'DOC_TYPE' => 'files',
+                        'DB_PORT' => 9200,
+                        'DB_USER' => 'null',
+                        'INPUT_FOLDER' => './',
+                        'OUTPUT_FOLDER' => 'dist',
+                        'LOG_FOLDER' => './',
+                        'DB_SHARDS' => 1,
+                        'DB_REPLICAS' => 1
+                        );
+
+
 try{
+
   $dotenv = new Dotenv(getcwd());
   $dotenv->load();
+
+  foreach($config_items as $k=>$v){
+    if(getenv($k) === FALSE)
+        putenv($k . '=' . $v);
+  }
+
 }catch(\Dotenv\Exception\InvalidPathException $e)
 {
-  putenv('DB_HOSTNAME=localhost');
-  putenv('DB_NAME=metadata');
-  putenv('DB_USER=null');
-  putenv('DB_PASSWORD=null');
-  putenv('DOC_TYPE=files');
-  putenv('DB_PORT=9200');
-  putenv('INPUT_FOLDER=.');
-  putenv('OUTPUT_FOLDER=dist');
-  putenv('LOG_FOLDER=./');
-  putenv('DB_SHARDS=1');
-  putenv('DB_REPLICAS=1');
+  foreach($config_items as $k=>$v)
+        putenv($k . '=' . $v);
 }
 
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2");

@@ -64,6 +64,7 @@ class IndexCommand extends Command
     }
 
     private function  get_mappings(){
+
          $mappings = array(
             'index' => getenv('DB_NAME'),
             'body' => array(
@@ -74,8 +75,8 @@ class IndexCommand extends Command
                 'mappings' => array(
                     getenv('DOC_TYPE') => array(
                         'properties' => array(
-                            'exif.ShutterSpeedValue' => array(
-                                'type' => 'string'
+                            'exif'=> array('type'=> 'nested', 
+                            'properties' => array('ShutterSpeedValue' => array('type' => 'string'))
                             )
                         )
                     )
