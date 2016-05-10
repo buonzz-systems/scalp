@@ -51,7 +51,6 @@ class IndexCommand extends Command
             $params = [
                 'index' => getenv('DB_NAME'),
                 'type' => getenv('DOC_TYPE'),
-                'timestamp' => strtotime("-1d"),
                 'body' => $metadata
             ];
 

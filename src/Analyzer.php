@@ -12,7 +12,7 @@ class Analyzer{
     $fileInfo = $getID3->analyze($filepath);
 
     $info = array();
-    $info['last_modified'] = filemtime($filepath);
+    $info['last_modified'] = date("c",filemtime($filepath));
     
     foreach($this->desired_properties as $p)
     {
@@ -27,7 +27,8 @@ class Analyzer{
         if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']))
         {   
             $exif_data = array();
-            $exif_data['DateTimeDigitized'] = strtotime($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
+            $t = intval($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
+            $exif_data['DateTimeDigitized'] = date("c",$t);
             $exif_data['ExposureTime'] = $fileInfo['jpg']['exif']['EXIF']['ExposureTime'];
             $exif_data['FNumber'] = $fileInfo['jpg']['exif']['EXIF']['FNumber'];
             $exif_data['ISOSpeedRatings'] = $fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings'];            
@@ -40,7 +41,7 @@ class Analyzer{
 
     }
 
-    $info['date_indexed'] = time();
+    $info['date_indexed'] = date("c",time());
     
 
     if($json_output)
