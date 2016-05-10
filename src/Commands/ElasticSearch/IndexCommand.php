@@ -27,7 +27,7 @@ class IndexCommand extends Command
     {
         
         $progress = new ProgressBar($output);
-        $progress->setFormat('files: %current% [%bar%] %percent:3s%% %elapsed:6s% %memory:6s% - %message%\n');
+        $progress->setFormat("files: %current% [%bar%] %elapsed:6s% %memory:6s% - %message%\n");
         $progress->start();
 
         $progress->setMessage("Initializing");

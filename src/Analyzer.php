@@ -27,7 +27,7 @@ class Analyzer{
     // dynamic properties
     foreach($this->desired_properties as $p)
     {
-        if(isset($fileInfo[$p]))
+        if(isset($fileInfo[$p]) && !is_array($fileInfo[$p]))
             $info[$p] = utf8_encode($fileInfo[$p]);
 
     }
