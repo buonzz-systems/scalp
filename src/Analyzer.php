@@ -13,7 +13,8 @@ class Analyzer{
 
     $info = array();
     $info['last_modified'] = date("c",filemtime($filepath));
-    
+    $info['last_accessed'] = date("c",fileatime($filepath));
+
     foreach($this->desired_properties as $p)
     {
         if(isset($fileInfo[$p]))
@@ -24,17 +25,33 @@ class Analyzer{
             $info['height'] = utf8_encode($fileInfo['video']['resolution_y']);
         }
 
-        if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']))
+        if(isset($fileInfo['jpg']) && isset($fileInfo['jpg']['exif']) && isset($fileInfo['jpg']['exif']['EXIF']))
         {   
             $exif_data = array();
-            $t = intval($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
-            $exif_data['DateTimeDigitized'] = date("c",$t);
-            $exif_data['ExposureTime'] = $fileInfo['jpg']['exif']['EXIF']['ExposureTime'];
-            $exif_data['FNumber'] = $fileInfo['jpg']['exif']['EXIF']['FNumber'];
-            $exif_data['ISOSpeedRatings'] = $fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings'];            
-            $exif_data['ShutterSpeedValue'] = (string) $fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue'];
-            $exif_data['ApertureValue'] = $fileInfo['jpg']['exif']['EXIF']['ApertureValue'];
-            $exif_data['FocalLength'] =  $fileInfo['jpg']['exif']['EXIF']['FocalLength'];
+
+            if(isset($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']))
+            {
+                $t = intval($fileInfo['jpg']['exif']['EXIF']['DateTimeDigitized']);
+                $exif_data['DateTimeDigitized'] = date("c",$t);
+            }
+
+            if(isset($fileInfo['jpg']['exif']['EXIF']['ExposureTime']))
+                $exif_data['ExposureTime'] = $fileInfo['jpg']['exif']['EXIF']['ExposureTime'];
+            
+            if(isset($fileInfo['jpg']['exif']['EXIF']['FNumber']))
+                $exif_data['FNumber'] = $fileInfo['jpg']['exif']['EXIF']['FNumber'];
+            
+            if(isset($fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings']))
+                $exif_data['ISOSpeedRatings'] = $fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings'];            
+            
+            if(isset($fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue']))
+                $exif_data['ShutterSpeedValue'] = (string) $fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue'];
+            
+            if(isset($fileInfo['jpg']['exif']['EXIF']['ApertureValue']))
+                $exif_data['ApertureValue'] = $fileInfo['jpg']['exif']['EXIF']['ApertureValue'];
+            
+            if(isset($fileInfo['jpg']['exif']['EXIF']['FocalLength']))
+                $exif_data['FocalLength'] =  $fileInfo['jpg']['exif']['EXIF']['FocalLength'];
             
             $info['exif'] = $exif_data;
         }

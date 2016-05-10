@@ -32,7 +32,7 @@ class IndexCommand extends Command
 
 
         // delete old index
-        $output->writeln("deleting the old db: " . getenv('DB_NAME'));
+        $output->writeln("removing the current db to avoid possible duplicates : " . $this->build_db_name());
         $this->delete_db($client);
 
         // re-creating the db and mappings
@@ -49,7 +49,7 @@ class IndexCommand extends Command
             $metadata = $analyzer->analyze($file->getPathname());
         
             $params = [
-                'index' => getenv('DB_NAME'),
+                'index' => $this->build_db_name(),
                 'type' => getenv('DOC_TYPE'),
                 'body' => $metadata
             ];
@@ -65,7 +65,7 @@ class IndexCommand extends Command
     private function  get_mappings(){
 
          $mappings = array(
-            'index' => getenv('DB_NAME'),
+            'index' => $this->build_db_name(),
             'body' => array(
                 'settings' => array(
                     'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 1 ,
@@ -88,7 +88,7 @@ class IndexCommand extends Command
 
     private function delete_db($client){
         try{
-            $params = ['index' => getenv('DB_NAME')];
+            $params = ['index' => $this->build_db_name()];
             $response = $client->indices()->delete($params);
         }
         catch(\Elasticsearch\Common\Exceptions\Missing404Exception $e){
@@ -116,5 +116,9 @@ class IndexCommand extends Command
                     ->setHosts($hosts)      // Set the hosts
                     ->build();              // Build the client object
         return $client;
+    }
+
+    private function build_db_name(){
+        return getenv('DB_NAME') . '-'. date('Y.m.d');
     }
 }
