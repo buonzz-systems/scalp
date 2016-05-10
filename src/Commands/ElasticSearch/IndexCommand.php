@@ -6,6 +6,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\Console\Helper\ProgressBar;
+
 use Elasticsearch\ClientBuilder;
 use Monolog\Logger;
 
@@ -24,19 +26,23 @@ class IndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $output->writeln("Initializing");
+        $progress = new ProgressBar($output);
+        $progress->setFormat('files: %current% [%bar%] %percent:3s%% %elapsed:6s% %memory:6s% - %message%\n');
+        $progress->start();
+
+        $progress->setMessage("Initializing");
 
         // connect
-        $output->writeln("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
+        $progress->setMessage("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
         $client = $this->build_client();
 
 
         // delete old index
-        $output->writeln("removing the current db to avoid possible duplicates : " . $this->build_db_name());
+        $progress->setMessage("removing the current db to avoid possible duplicates : " . $this->build_db_name());
         $this->delete_db($client);
 
         // re-creating the db and mappings
-        $output->writeln("re-creating the db and mappings");
+        $progress->setMessage("re-creating the db and mappings");
         $response = $client->indices()->create($this->get_mappings());
 
 
@@ -45,7 +51,7 @@ class IndexCommand extends Command
         $analyzer = new Analyzer();
 
         foreach($files as $file){
-            $output->writeln('Processing <comment>'. $file->getPathname() .' </comment>'); 
+            $progress->setMessage('Processing <comment>'. $file->getPathname() .' </comment>');
             $metadata = $analyzer->analyze($file->getPathname());
         
             $params = [
@@ -55,11 +61,13 @@ class IndexCommand extends Command
             ];
 
             $response = $client->index($params);
-
+            $progress->advance();
         }
 
-        $output->writeln("Success!");
+        $progress->finish();
+        $progress->clear();
 
+        $output->writeln("Success! - processed files: " . count($files));
     }
 
     private function  get_mappings(){
