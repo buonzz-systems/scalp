@@ -9,7 +9,6 @@ composer.lock
 bin/*.yaml
 *.mp4
 *.jpg
-*.json
 /dist/
 .env
 logs/scalp.log
