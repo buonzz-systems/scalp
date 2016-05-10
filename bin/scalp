@@ -71,7 +71,14 @@ try{
         putenv($k . '=' . $v);
 }
 
-$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2");
+// set default command
+$command = new IndexCommand();
+
+
+$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.3");
 $application->add(new IndexCommand);
 $application->add(new AnalyzeCommand);
+
+$application->setDefaultCommand($command->getName());
+
 $application->run();
