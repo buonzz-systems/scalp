@@ -82,7 +82,7 @@ class ElasticServer{
         ];
 
         $results = $client->search($params);
-        
+       
         if(isset($results['hits']['hits'][0]['_id']))
             return $results['hits']['hits'][0]['_id'];
         else
@@ -94,10 +94,13 @@ class ElasticServer{
         $params = [
             'index' => ElasticServer::build_db_name(),
             'type' => getenv('DOC_TYPE'),
+            'id' => $id,
             'body' => $body
         ];
 
         $response = $client->update($params);
+        //var_dump($response);
+        //die();
     } // update
 
 }
