@@ -33,6 +33,7 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 use Buonzz\Scalp\Commands\ElasticSearch\IndexCommand;
 use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
+use Buonzz\Scalp\Commands\Thumb\CreateThumbnailCommand;
 use Dotenv\Dotenv;
 
 use Symfony\Component\Console\Application;
@@ -78,6 +79,7 @@ $command = new IndexCommand();
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.3");
 $application->add(new IndexCommand);
 $application->add(new AnalyzeCommand);
+$application->add(new CreateThumbnailCommand);
 
 $application->setDefaultCommand($command->getName());
 

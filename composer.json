@@ -15,7 +15,8 @@
         "symfony/console": "^3.0",
         "james-heinrich/getid3": "1.9.*",
         "elasticsearch/elasticsearch": "2.*",
-        "monolog/monolog": "^1.19"
+        "monolog/monolog": "^1.19",
+        "masterexploder/phpthumb": "^2.1"
     },
 	"autoload": {
         "psr-4": {
