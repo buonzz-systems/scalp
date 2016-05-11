@@ -85,9 +85,6 @@ First, you need to create a configuration file called .env This will be used by 
 | THUMB_PERCENT_RESIZE    | Used when creating thumbnails, this should be between 10-100, the images will be resized with this percent value | 10           |
 
 
-A file called **.env.example** contains a sample configuration. You can just copy it and rename it to .env and tweak its contents.
-
-
 #### File Command
 
 To generate static JSON files
@@ -102,11 +99,21 @@ Load it to ElasticSearch
 scalp es:index
 ```
 
+or just simply
+```
+scalp
+```
+
 #### Thumb Command
 
 create thumbnails
 ```
 scalp thumb:create
+```
+
+Save thumbnails to ElasticSearch
+```
+scalp thumb:save
 ```
 
 
