@@ -64,4 +64,40 @@ class ElasticServer{
             ;
         }
     }
+
+    public static function get_file_id($client, $filepath, $filename){
+        $params = [
+            'index' => ElasticServer::build_db_name(),
+            'type' => getenv('DOC_TYPE'),
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [ 'match' => [ 'filepath' => $filepath ] ],
+                            [ 'match' => [ 'filename' => $filename ] ],
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $results = $client->search($params);
+        
+        if(isset($results['hits']['hits'][0]['_id']))
+            return $results['hits']['hits'][0]['_id'];
+        else
+            return false;
+    } // get_file_id
+
+
+    public static function update($client, $id, $body){
+        $params = [
+            'index' => ElasticServer::build_db_name(),
+            'type' => getenv('DOC_TYPE'),
+            'body' => $body
+        ];
+
+        $response = $client->update($params);
+    } // update
+
 }
