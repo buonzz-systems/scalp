@@ -32,24 +32,34 @@ class CreateThumbnailCommand extends Command
         if(!file_exists($destination_folder))
         {
             mkdir($destination_folder);
+            if(!file_exists($destination_folder . '/thumbs'))
+                mkdir($destination_folder . '/thumbs');
         }
 
         $output->writeln("reading files from " . $source_folder);
-        $output->writeln("writing data to "  . $destination_folder);
+        $output->writeln("writing data to "  . $destination_folder . '/thumbs');
         
         $files = MediaFilesList::get($source_folder);
         
         foreach($files as $k=>$file)
         {
 
-            $thumb = new \PHPThumb\GD($file->getRealPath());
-            $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
+           $ext = strtolower($file->getExtension()); 
 
-            $prefix = str_replace('/', '.', $file->getPath()) .".-thumb-";
+           if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif','bmp')))
+           {
 
-            $filename = $destination_folder . "/" . $prefix. $file->getFilename();
-            $thumb->save($filename);
-            $output->writeln('<comment>'. $file->getFilename() .  ' processed </comment>');
+                $thumb = new \PHPThumb\GD($file->getRealPath());
+                $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
+
+                $prefix = str_replace('/', '.', $file->getPath()) .".-thumb-";
+
+                $filename = $destination_folder . "/thumbs/" . $prefix. $file->getFilename();
+                $thumb->save($filename);
+                $output->writeln('File processed: <comment>'. $file->getFilename() .  '</comment>');
+            }
+            else
+                $output->writeln('File skipped: <comment>'. $file->getFilename() .  '</comment>');   
         }
 
          $output->writeln("Success!");
