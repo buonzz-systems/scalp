@@ -43,7 +43,7 @@ class CreateThumbnailCommand extends Command
         {
 
             $thumb = new \PHPThumb\GD($file->getRealPath());
-            $thumb->adaptiveResize(175, 175);
+            $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
 
             $prefix = str_replace('/', '.', $file->getPath()) .".-thumb-";
 

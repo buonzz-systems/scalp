@@ -52,7 +52,8 @@ $config_items = array('DB_HOSTNAME' => 'localhost',
                         'OUTPUT_FOLDER' => 'dist',
                         'LOG_FOLDER' => './',
                         'DB_SHARDS' => 1,
-                        'DB_REPLICAS' => 1
+                        'DB_REPLICAS' => 1,
+                        'THUMB_PERCENT_RESIZE' => 10
                         );
 
 
