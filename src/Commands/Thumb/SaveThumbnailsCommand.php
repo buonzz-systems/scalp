@@ -54,12 +54,22 @@ class SaveThumbnailsCommand extends Command
                         $orig_info['path'], 
                         $orig_info['filename']);
 
+                $metadata = array('fileid' => $file_id,
+                                  'path' => $orig_info['path'],
+                                  'filename' => $orig_info['filename'],
+                                  'timestamp' => date("c",time()),
+                                  'data' => $data
+                                  );
 
-                ElasticServer::update($client, $file_id,[
-                                            'doc' => [
-                                                'thumbnail' => $data
-                                            ]
-                                        ]);
+
+                $params = [
+                    'index' => $this->build_db_name(),
+                    'type' => 'thumbnails',
+                    'body' => $metadata
+                ];
+
+                $response = $client->index($params);
+
 
                 $output->writeln('File processed: <comment>'. $file->getFilename() .  '</comment>');
             }
@@ -79,6 +89,25 @@ class SaveThumbnailsCommand extends Command
         $output['filename'] = $components[1];
 
         return $output;
+    }
+
+    private function build_db_name(){
+        return 'thumbnails-' . getenv('DB_NAME') . '-'. date('Y.m.d');
+    }
+
+    private function get_mappings(){
+
+         $mappings = array(
+            'index' => $this->build_db_name(),
+            'body' => array(
+                'settings' => array(
+                    'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 1 ,
+                    'number_of_replicas' => getenv('DB_REPLICAS') ? getenv('DB_REPLICAS') : 1
+                )
+            )
+        );
+
+        return $mappings;
     }
 
 }
