@@ -30,7 +30,7 @@ class SaveThumbnailsCommand extends Command
 
 
         $output->writeln("reading files from " . $destination_folder . '/thumbs');
-        $output->writeln("writing data to http://"  . getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT') . '/' . getenv('DB_NAME'));
+        $output->writeln("writing data to http://"  . getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT') . '/' . $this->build_db_name());
         
         $files = MediaFilesList::get($destination_folder);
 
