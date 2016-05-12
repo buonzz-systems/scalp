@@ -92,10 +92,8 @@ class IndexCommand extends Command
 
                 $progress->setMessage('comparing content hash if changed');
 
-                $db_content_hash = ElasticServer::get_content_hash(
-                                                $client, 
-                                                $file->getPathname(), 
-                                                $file->getFilename());
+                $db_content_hash = ElasticServer::get_content_hash_by_id(
+                                                $client, $file_id);
 
                 $local_content_hash = $metadata['file_contents_hash'];
 

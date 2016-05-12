@@ -111,26 +111,17 @@ class ElasticServer{
     } // get_file id by content hash
 
 
-     public static function get_content_hash($client, $filepath, $filename){
+     public static function get_content_hash_by_id($client, $id){
         $params = [
             'index' => ElasticServer::build_db_name(),
             'type' => getenv('DOC_TYPE'),
-            'body' => [
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            [ 'match' => [ 'filepath' => $filepath ] ],
-                            [ 'match' => [ 'filename' => $filename ] ],
-                        ]
-                    ]
-                ]
-            ]
+            'id' => $id
         ];
 
-        $results = $client->search($params);
+        $results = $client->get($params);
 
-        if(isset($results['hits']['hits'][0]['_source']['file_contents_hash']))
-            return $results['hits']['hits'][0]['_source']['file_contents_hash'];
+        if(isset($results['_source']['file_contents_hash']))
+            return $results['_source']['file_contents_hash'];
         else
             return false;
     } // get content hash
