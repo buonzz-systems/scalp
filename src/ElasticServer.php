@@ -37,18 +37,36 @@ class ElasticServer{
             'index' => ElasticServer::build_db_name(),
             'body' => array(
                 'settings' => array(
-                    'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 1 ,
+                    'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 2 ,
                     'number_of_replicas' => getenv('DB_REPLICAS') ? getenv('DB_REPLICAS') : 1
                 ),
                 'mappings' => array(
                     getenv('DOC_TYPE') => array(
                         'properties' => array(
-                            'exif'=> array('type'=> 'nested', 
-                            'properties' => array('ShutterSpeedValue' => array('type' => 'string'))
+                                'exif'=> array('type'=> 'nested', 
+                                    'properties' => array(
+                                        'ShutterSpeedValue' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'ApertureValue' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'ExposureTime' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'FNumber' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'FocalLength' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'ISOSpeedRatings' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'ShutterSpeedValue' => array('type' => 'double', 'index' => 'not_analyzed'),
+                                        'DateTimeDigitized' => array('type' => 'date', 'index' => 'not_analyzed')
+                                    )
                             ),
                             'file_contents_hash'=> array('type' => "string", 'index' => 'not_analyzed'),
                             'filepath'=> array('type' => "string", 'index' => 'not_analyzed'),
-                            'filename'=> array('type' => "string", 'index' => 'not_analyzed')
+                            'filename'=> array('type' => "string", 'index' => 'not_analyzed'),
+                            'mime_type'=> array('type' => "string", 'index' => 'not_analyzed'),
+                            'playtime_string'=> array('type' => "string", 'index' => 'not_analyzed'),
+                            'file_permissions'=> array('type' => "string", 'index' => 'not_analyzed'),
+                            'height'=> array('type' => "long", 'index' => 'not_analyzed'),
+                            'width'=> array('type' => "long", 'index' => 'not_analyzed'),
+                            'filesize'=> array('type' => "double", 'index' => 'not_analyzed'),
+                            'playtime_seconds'=> array('type' => "double", 'index' => 'not_analyzed'),
+                            'bitrate'=> array('type' => "double", 'index' => 'not_analyzed'),
+                            'fileformat'=> array('type' => "string", 'index' => 'not_analyzed')
                         )
                     )
                 )

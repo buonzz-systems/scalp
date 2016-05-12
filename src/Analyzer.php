@@ -85,22 +85,22 @@ class Analyzer{
             }
 
             if(isset($fileInfo['jpg']['exif']['EXIF']['ExposureTime']))
-                $exif_data['ExposureTime'] = $fileInfo['jpg']['exif']['EXIF']['ExposureTime'];
+                $exif_data['ExposureTime'] = floatval($fileInfo['jpg']['exif']['EXIF']['ExposureTime']);
             
             if(isset($fileInfo['jpg']['exif']['EXIF']['FNumber']))
-                $exif_data['FNumber'] = $fileInfo['jpg']['exif']['EXIF']['FNumber'];
+                $exif_data['FNumber'] = floatval($fileInfo['jpg']['exif']['EXIF']['FNumber']);
             
             if(isset($fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings']))
-                $exif_data['ISOSpeedRatings'] = $fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings'];            
+                $exif_data['ISOSpeedRatings'] = floatval($fileInfo['jpg']['exif']['EXIF']['ISOSpeedRatings']);            
             
             if(isset($fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue']))
-                $exif_data['ShutterSpeedValue'] = (string) $fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue'];
+                $exif_data['ShutterSpeedValue'] = floatval($fileInfo['jpg']['exif']['EXIF']['ShutterSpeedValue']);
             
             if(isset($fileInfo['jpg']['exif']['EXIF']['ApertureValue']))
-                $exif_data['ApertureValue'] = $fileInfo['jpg']['exif']['EXIF']['ApertureValue'];
+                $exif_data['ApertureValue'] = floatval($fileInfo['jpg']['exif']['EXIF']['ApertureValue']);
             
             if(isset($fileInfo['jpg']['exif']['EXIF']['FocalLength']))
-                $exif_data['FocalLength'] =  $fileInfo['jpg']['exif']['EXIF']['FocalLength'];
+                $exif_data['FocalLength'] =  floatval($fileInfo['jpg']['exif']['EXIF']['FocalLength']);
             
         }
 
@@ -159,7 +159,7 @@ class Analyzer{
         $base_date = '';
         $output = array();
 
-        if(isset($info['exif']) && isset($info['exif']['DateTimeDigitized'])){
+        if(isset($info['exif']) && isset($info['exif']['DateTimeDigitized']))
             $base_date = strtotime($info['exif']['DateTimeDigitized']);
         else
             $base_date = strtotime($info['last_modified']);
@@ -169,11 +169,10 @@ class Analyzer{
         $output[] =  date("l", $base_date);
         $output[] =  date("F", $base_date);
         $output[] =  date("M", $base_date);
-        $output[] =  date("M", $base_date);
         $output[] =  date("Y", $base_date);
-        $output[] =  date("M", $base_date);
         $output[] =  date("ga", $base_date);
         $output[] =  date("e", $base_date);
+        $output[] =  date("j", $base_date);
 
         return $output;
     }
