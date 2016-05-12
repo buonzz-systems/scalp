@@ -39,9 +39,17 @@ class IndexCommand extends Command
 
         // connect
         $output->writeln("Establishing connection to ElasticServer at " . getenv('DB_HOSTNAME'));
-        $client = ElasticServer::build_client();
 
-        $is_resync = ElasticServer::index_exists($client);
+        try{
+
+            $client = ElasticServer::build_client();
+            $is_resync = ElasticServer::index_exists($client);
+
+        }catch(\Exception $ex){
+            $output->writeln('<error>Opps!, I encountered an error upon connecting to '. getenv('DB_HOSTNAME'). '</error>');
+            exit;
+        }   
+        
 
         
         if($is_resync)
