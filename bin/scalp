@@ -33,6 +33,7 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 use Buonzz\Scalp\Commands\ElasticSearch\IndexCommand;
 use Buonzz\Scalp\Commands\ElasticSearch\DeleteIndexCommand;
+use Buonzz\Scalp\Commands\ElasticSearch\SearchIndexCommand;
 use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
 use Buonzz\Scalp\Commands\Thumb\CreateThumbnailCommand;
 use Buonzz\Scalp\Commands\Thumb\SaveThumbnailsCommand;
@@ -82,6 +83,7 @@ $command = new IndexCommand();
 $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.4");
 $application->add(new IndexCommand);
 $application->add(new DeleteIndexCommand);
+$application->add(new SearchIndexCommand);
 $application->add(new AnalyzeCommand);
 $application->add(new CreateThumbnailCommand);
 $application->add(new SaveThumbnailsCommand);
