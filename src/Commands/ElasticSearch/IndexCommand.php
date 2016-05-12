@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 use Elasticsearch\ClientBuilder;
 use Monolog\Logger;
@@ -27,7 +28,8 @@ class IndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-
+        $stopwatch = new Stopwatch();
+        $stopwatch->start('indexing');
         $output->writeln("Initializing");
 
         // connect
@@ -112,7 +114,9 @@ class IndexCommand extends Command
 
         $progress->finish();
         $progress->clear();
+        $event = $stopwatch->stop('indexing');
 
-        $output->writeln("Success! - processed files: " . count($files));
+        $output->writeln("Success! <comment>Processed files:</comment> " . count($files) 
+                        . ' <comment>Duration:</comment> ' . $analyzer->ms_to_human($event->getDuration()));
     }
 }

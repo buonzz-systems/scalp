@@ -137,4 +137,19 @@ class Analyzer{
             }
         }
     }
+
+    function ms_to_human($ms)
+    {
+        $sign = $ms < 0 ? "-" : "";
+        $ms = abs($ms);
+        $sec = floor($ms / 1000);
+        $ms = $ms % 1000;
+        $min = floor($sec / 60);
+        $sec = $sec % 60;
+        $hr = floor($min / 60);
+        $min = $min % 60;
+        $day = floor($hr / 60);
+        $hr = $hr % 60;
+        return "$sign$hr h $min m $sec s";
+    }
 }
