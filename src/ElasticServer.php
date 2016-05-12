@@ -45,7 +45,10 @@ class ElasticServer{
                         'properties' => array(
                             'exif'=> array('type'=> 'nested', 
                             'properties' => array('ShutterSpeedValue' => array('type' => 'string'))
-                            )
+                            ),
+                            'file_contents_hash'=> array('type' => "string", 'index' => 'not_analyzed'),
+                            'filepath'=> array('type' => "string", 'index' => 'not_analyzed'),
+                            'filename'=> array('type' => "string", 'index' => 'not_analyzed')
                         )
                     )
                 )
@@ -88,6 +91,24 @@ class ElasticServer{
         else
             return false;
     } // get_file_id
+
+
+    public static function get_file_id_by_hash($client, $hash){
+        $params = [
+            'index' => ElasticServer::build_db_name(),
+            'type' => getenv('DOC_TYPE'),
+            'body' => [
+                'query' =>  [ 'match' => [ 'file_contents_hash' => $hash ] ]
+                    ]
+                ];
+
+        $results = $client->search($params);
+       
+        if(isset($results['hits']['hits'][0]['_id']))
+            return $results['hits']['hits'][0]['_id'];
+        else
+        return false;
+    } // get_file id by content hash
 
 
      public static function get_content_hash($client, $filepath, $filename){

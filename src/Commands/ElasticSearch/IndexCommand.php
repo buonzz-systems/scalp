@@ -32,8 +32,13 @@ class IndexCommand extends Command
         $stopwatch->start('indexing');
         $output->writeln("Initializing");
 
+        $counters = array();
+        $counters['skipped'] = 0;
+        $counters['mismatch'] =0;
+        $counters['new'] =0;
+
         // connect
-        $output->writeln("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
+        $output->writeln("Establishing connection to ElasticServer at " . getenv('DB_HOSTNAME'));
         $client = ElasticServer::build_client();
 
         $is_resync = ElasticServer::index_exists($client);
@@ -63,13 +68,8 @@ class IndexCommand extends Command
         foreach($files as $file){
 
             $progress->setMessage('Processing <comment>'. $file->getPathname() .' </comment>');
-            
-            $file_id = ElasticServer::get_file_id(
-                    $client, 
-                    $file->getPathname(), 
-                    $file->getFilename());
-
-            $metadata = $analyzer->analyze($file->getPathname());            
+            $metadata = $analyzer->analyze($file->getPathname()); 
+            $file_id = ElasticServer::get_file_id_by_hash($client,$metadata['file_contents_hash']);
 
             // if file doesn't exists, insert it
             if($file_id == false)
@@ -83,6 +83,8 @@ class IndexCommand extends Command
                     'body' => $metadata
                 ];
                 $response = $client->index($params);
+
+                $counters['new']++;
 
             }
             else // update existing document
@@ -104,9 +106,13 @@ class IndexCommand extends Command
                     $params = ['doc' => [getenv('DOC_TYPE') => $metadata]];
 
                     ElasticServer::update($client, $file_id, $params);
+                    $counters['mismatch']++;
                 }
                 else
+                {
+                    $counters['skipped']++;
                     $progress->setMessage('<comment>'. $file->getFilename() . "</comment>'s contents did not changed, skipped");                    
+                }
             }
 
             $progress->advance();
@@ -117,6 +123,10 @@ class IndexCommand extends Command
         $event = $stopwatch->stop('indexing');
 
         $output->writeln("Success! <comment>Processed files:</comment> " . count($files) 
-                        . ' <comment>Duration:</comment> ' . $analyzer->ms_to_human($event->getDuration()));
+                        . ' <comment>Duration:</comment> ' . $analyzer->ms_to_human($event->getDuration())
+                        . ' <comment>New:</comment>' . $counters['new'] 
+                        . ' <comment>Skipped:</comment>' . $counters['skipped']
+                        . ' <comment>Mismatch:</comment>' . $counters['mismatch']
+                        );
     }
 }
