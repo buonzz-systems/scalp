@@ -28,7 +28,7 @@ class ElasticServer{
     }
 
     public static function build_db_name(){
-        return getenv('DB_NAME') . '-'. date('Y.m.d');
+        return getenv('DB_NAME');
     }
 
     public static function get_mappings(){
@@ -99,8 +99,11 @@ class ElasticServer{
         ];
 
         $response = $client->update($params);
-        //var_dump($response);
-        //die();
     } // update
+
+    public static function index_exists($client){
+        $params = ['index' => ElasticServer::build_db_name()];
+         return $client->indices()->exists($params);
+    }
 
 }

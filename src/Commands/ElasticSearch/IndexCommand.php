@@ -27,29 +27,35 @@ class IndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $output->writeln("Initializing");
 
-        $progress = new ProgressBar($output);
-        $progress->setFormat("files: %current% [%bar%] %elapsed:6s% %memory:6s% - %message%\n");
+        $output->writeln("Initializing");
 
         // connect
         $output->writeln("Establishing connection to ES at " . getenv('DB_HOSTNAME'));
         $client = ElasticServer::build_client();
 
+        $is_resync = ElasticServer::index_exists($client);
 
-        // delete old index
-        $output->writeln("removing the current db to avoid possible duplicates : " . ElasticServer::build_db_name());
-        ElasticServer::delete_db($client);
+        
+        if($is_resync)
+        {
+            $output->writeln("database <comment>'". ElasticServer::build_db_name() . "'</comment> already exists, performing resync..");
+        }
+        else
+        {
+            // creating the db and mappings
+            $output->writeln("fresh indexing process detected, creating the db and data mappings");
+            $response = $client->indices()->create(ElasticServer::get_mappings());
+        }
 
-        // re-creating the db and mappings
-        $output->writeln("re-creating the db and mappings");
-        $response = $client->indices()->create(ElasticServer::get_mappings());
-
+        $output->writeln("--------");
 
         $files = MediaFilesList::get(getenv('INPUT_FOLDER'));
         
         $analyzer = new Analyzer();
 
+        $progress = new ProgressBar($output);
+        $progress->setFormat("files: %current% [%bar%] %elapsed:6s% %memory:6s% - %message%\n");
         $progress->start();
 
         foreach($files as $file){
@@ -67,7 +73,7 @@ class IndexCommand extends Command
         }
 
         $progress->finish();
-        $progress->clear();
+         $progress->clear();
 
         $output->writeln("Success! - processed files: " . count($files));
     }
