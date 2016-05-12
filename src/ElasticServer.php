@@ -90,6 +90,33 @@ class ElasticServer{
     } // get_file_id
 
 
+     public static function get_content_hash($client, $filepath, $filename){
+        $params = [
+            'index' => ElasticServer::build_db_name(),
+            'type' => getenv('DOC_TYPE'),
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [ 'match' => [ 'filepath' => $filepath ] ],
+                            [ 'match' => [ 'filename' => $filename ] ],
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $results = $client->search($params);
+
+        if(isset($results['hits']['hits'][0]['_source']['file_contents_hash']))
+            return $results['hits']['hits'][0]['_source']['file_contents_hash'];
+        else
+            return false;
+    } // get content hash
+
+
+
+
     public static function update($client, $id, $body){
         $params = [
             'index' => ElasticServer::build_db_name(),

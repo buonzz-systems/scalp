@@ -59,21 +59,59 @@ class IndexCommand extends Command
         $progress->start();
 
         foreach($files as $file){
-            $progress->setMessage('Processing <comment>'. $file->getPathname() .' </comment>');
-            $metadata = $analyzer->analyze($file->getPathname());
-        
-            $params = [
-                'index' => ElasticServer::build_db_name(),
-                'type' => getenv('DOC_TYPE'),
-                'body' => $metadata
-            ];
 
-            $response = $client->index($params);
+            $progress->setMessage('Processing <comment>'. $file->getPathname() .' </comment>');
+            
+            $file_id = ElasticServer::get_file_id(
+                    $client, 
+                    $file->getPathname(), 
+                    $file->getFilename());
+
+            $metadata = $analyzer->analyze($file->getPathname());            
+
+            // if file doesn't exists, insert it
+            if($file_id == false)
+            {
+                $progress->setMessage('new file: <comment>'. $file->getFilename() .' </comment>');
+
+                
+                $params = [
+                    'index' => ElasticServer::build_db_name(),
+                    'type' => getenv('DOC_TYPE'),
+                    'body' => $metadata
+                ];
+                $response = $client->index($params);
+
+            }
+            else // update existing document
+            {
+
+                $progress->setMessage('comparing content hash if changed');
+
+                $db_content_hash = ElasticServer::get_content_hash(
+                                                $client, 
+                                                $file->getPathname(), 
+                                                $file->getFilename());
+
+                $local_content_hash = $metadata['file_contents_hash'];
+
+                if($db_content_hash != $local_content_hash)
+                {
+                    $progress->setMessage('<comment>'. $file->getFilename() . '</comment> hash mismatch, updating...');
+                    
+                    $params = ['doc' => [getenv('DOC_TYPE') => $metadata]];
+
+                    ElasticServer::update($client, $file_id, $params);
+                }
+                else
+                    $progress->setMessage('<comment>'. $file->getFilename() . "</comment>'s contents did not changed, skipped");                    
+            }
+
             $progress->advance();
-        }
+        } // foreach
 
         $progress->finish();
-         $progress->clear();
+        $progress->clear();
 
         $output->writeln("Success! - processed files: " . count($files));
     }

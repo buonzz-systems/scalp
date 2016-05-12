@@ -35,6 +35,8 @@ class Analyzer{
     // jpg-related metadata
     $info['exif'] = $this->extract_jpg($fileInfo);
 
+    // store the content hash, used in resync
+    $info['file_contents_hash'] = hash_file('sha256',$filepath);
 
     // video-specific meta
     if(isset($fileInfo['video'])){
