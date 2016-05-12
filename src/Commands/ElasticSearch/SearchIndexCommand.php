@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
 
-use Buonzz\Scalp\ElasticServer;
+use Buonzz\Scalp\Searcher;
 
 class SearchIndexCommand extends Command
 {
@@ -15,22 +15,47 @@ class SearchIndexCommand extends Command
     {
         $this
             ->setName('search')
-            ->setDescription('search files on ElasticSearch');
+            ->setDescription('search files on ElasticSearch')
+            ->addArgument(
+            'keywords',
+            InputArgument::REQUIRED,
+            'Enter any keywords you want to search'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
+        $keywords = $input->getArgument('keywords');
+
+        $results = Searcher::search($keywords);
+
+        $data = array();
+        
+        foreach($results as $result){
+            
+            $data[] = array(
+                    $result['filepath'] . '/'. $result['filename'] , 
+                    $this->human_filesize($result['filesize']), 
+                    $result['last_modified'], 
+                    $result['DateTimeDigitized']);
+        }
+
         $table = new Table($output);
+        
         $table
-            ->setHeaders(array('ISBN', 'Title', 'Author'))
-            ->setRows(array(
-                array('99921-58-10-7', 'Divine Comedy', 'Dante Alighieri'),
-                array('9971-5-0210-0', 'A Tale of Two Cities', 'Charles Dickens'),
-                array('960-425-059-0', 'The Lord of the Rings', 'J. R. R. Tolkien'),
-                array('80-902734-1-6', 'And Then There Were None', 'Agatha Christie'),
-            ))
-        ;
+            ->setHeaders(array('File', 'Size', 'Last Modified', 'Date Captured'))
+            ->setRows($data);
+
         $table->render();
+    }
+
+    private function human_filesize($bytes, $dec = 2) 
+    {
+        $size   = array(' B', ' kB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
+        $factor = floor((strlen($bytes) - 1) / 3);
+
+        return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . @$size[$factor];
     }
 
 }
