@@ -145,4 +145,10 @@ class ElasticServer{
          return $client->indices()->exists($params);
     }
 
+    public static function delete_index(){
+        $client = ElasticServer::build_client();
+        $params = ['index' => ElasticServer::build_db_name()];
+        $response = $client->indices()->delete($params);
+    }
+
 }
