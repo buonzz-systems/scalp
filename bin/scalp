@@ -79,7 +79,7 @@ try{
 $command = new IndexCommand();
 
 
-$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.3");
+$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.4");
 $application->add(new IndexCommand);
 $application->add(new DeleteIndexCommand);
 $application->add(new AnalyzeCommand);
