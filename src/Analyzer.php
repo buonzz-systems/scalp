@@ -23,7 +23,6 @@ class Analyzer{
     // turn the path into tags
     $info['path_tags'] = $this->path_to_tags($filepath, $fileInfo['filename']); 
 
-
     // dynamic properties
     foreach($this->desired_properties as $p)
     {
@@ -34,6 +33,9 @@ class Analyzer{
 
     // jpg-related metadata
     $info['exif'] = $this->extract_jpg($fileInfo);
+
+     // date tags
+    $info['date_tags'] = $this->compute_date_tags($info);    
 
     // store the content hash, used in resync
     $info['file_contents_hash'] = hash_file('sha256',$filepath);
@@ -151,5 +153,28 @@ class Analyzer{
         $day = floor($hr / 60);
         $hr = $hr % 60;
         return "$sign$hr h $min m $sec s";
+    }
+
+    function compute_date_tags($info){
+        $base_date = '';
+        $output = array();
+
+        if(isset($info['exif']) && isset($info['exif']['DateTimeDigitized'])){
+            $base_date = strtotime($info['exif']['DateTimeDigitized']);
+        else
+            $base_date = strtotime($info['last_modified']);
+
+        $output[] =  date("D", $base_date);
+        $output[] =  date("jS", $base_date);
+        $output[] =  date("l", $base_date);
+        $output[] =  date("F", $base_date);
+        $output[] =  date("M", $base_date);
+        $output[] =  date("M", $base_date);
+        $output[] =  date("Y", $base_date);
+        $output[] =  date("M", $base_date);
+        $output[] =  date("ga", $base_date);
+        $output[] =  date("e", $base_date);
+
+        return $output;
     }
 }
