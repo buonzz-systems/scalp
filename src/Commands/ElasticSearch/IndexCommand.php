@@ -62,6 +62,7 @@ class IndexCommand extends Command
         $analyzer = new Analyzer();
 
         $progress = new ProgressBar($output);
+        $progress->setMessage('loading files...');
         $progress->setFormat("files: %current% [%bar%] %elapsed:6s% %memory:6s% - %message%\n");
         $progress->start();
 
