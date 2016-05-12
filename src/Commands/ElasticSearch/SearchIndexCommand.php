@@ -37,8 +37,9 @@ class SearchIndexCommand extends Command
             $data[] = array(
                     $result['filepath'] . '/'. $result['filename'] , 
                     $this->human_filesize($result['filesize']), 
-                    $result['last_modified'], 
-                    $result['DateTimeDigitized']);
+                    date("n/j/Y g:i A, D", strtotime($result['last_modified'])), 
+                    date("n/j/Y g:i A, D", strtotime($result['DateTimeDigitized']))
+                    );
         }
 
         $table = new Table($output);
