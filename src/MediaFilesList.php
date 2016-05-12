@@ -6,7 +6,7 @@ class MediaFilesList {
 
 		$output = array();
 		$it = new \RecursiveDirectoryIterator($folder);
-		$display = array( 'jpeg', 'jpg', 'png', 'mov', 'mp4', 'mp3', 'mkv', 'flv');
+		$display = array( 'jpeg', 'jpg', 'png', 'mov', 'mp4', 'mp3', 'mkv', 'flv', 'gif', 'bmp');
 		
 		foreach(new \RecursiveIteratorIterator($it) as $file)
 		{
