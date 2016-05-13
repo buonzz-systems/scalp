@@ -32,6 +32,7 @@ class Searcher{
                 $item = array();
                 
                 $item['last_modified'] = $result_item->_source->last_modified;
+                $item['id'] = $result_item->_id;
                 $item['last_accessed'] = $result_item->_source->last_accessed;
                 $item['file_permissions'] = $result_item->_source->file_permissions;
                 $item['date_indexed'] = $result_item->_source->date_indexed;

@@ -116,6 +116,14 @@ Save thumbnails to ElasticSearch
 scalp thumb:save
 ```
 
+##### Viewing the thumbnails
+
+You can get a preview of those thumbnails by using the PHP's built in web server
+
+```
+php -S localhost:8080 /usr/local/bin/scalp
+``` 
+then in your localhost, just append the url given by search command.
 
 ### Testing Indexed documents
 

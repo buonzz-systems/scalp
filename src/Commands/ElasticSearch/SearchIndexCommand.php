@@ -39,14 +39,15 @@ class SearchIndexCommand extends Command
                     $result['filepath'] . '/'. $result['filename'] , 
                     Analyzer::human_filesize($result['filesize']), 
                     date("n/j/Y g:i A, D", strtotime($result['last_modified'])), 
-                    isset($result['DateTimeDigitized']) ? date("n/j/Y g:i A, D", strtotime($result['DateTimeDigitized'])) : null
+                    isset($result['DateTimeDigitized']) ? date("n/j/Y g:i A, D", strtotime($result['DateTimeDigitized'])) : null,
+                    '/?id=' . $result['id']
                     );
         }
 
         $table = new Table($output);
         
         $table
-            ->setHeaders(array('File', 'Size', 'Last Modified', 'Date Captured'))
+            ->setHeaders(array('File', 'Size', 'Last Modified', 'Date Captured', 'Preview'))
             ->setRows($data);
 
         $table->render();
