@@ -97,6 +97,6 @@ if (php_sapi_name() == "cli") {
 } else {
 
   $server = new WebServer();
-  echo $server->serve();
-   
+  $id = isset($_GET['id']) ? $_GET['id'] : null;
+  echo $server->serve($id);
 }

@@ -137,6 +137,24 @@ class ElasticServer{
     } // get_file id by content hash
 
 
+    public static function get_thumb_by_fileid($client, $fileid){
+        $params = [
+            'index' => 'thumbnails-' . getenv('DB_NAME'),
+            'type' => 'thumbnails',
+            'body' => [
+                'query' =>  [ 'match' => [ 'fileid' => $fileid ] ]
+                    ]
+                ];
+
+        $results = $client->search($params);
+
+        if(isset($results['hits']['hits'][0]['_source']['data']))
+            return $results['hits']['hits'][0]['_source']['data'];
+        else
+            return false;
+    } // get_file id by content hash
+
+
      public static function get_content_hash_by_id($client, $id){
         $params = [
             'index' => ElasticServer::build_db_name(),

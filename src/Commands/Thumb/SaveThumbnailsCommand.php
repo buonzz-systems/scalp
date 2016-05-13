@@ -92,7 +92,7 @@ class SaveThumbnailsCommand extends Command
     }
 
     private function build_db_name(){
-        return 'thumbnails-' . getenv('DB_NAME') . '-'. date('Y.m.d');
+        return 'thumbnails-' . getenv('DB_NAME');
     }
 
     private function get_mappings(){
