@@ -19,6 +19,7 @@ class Analyzer{
     $info['last_accessed'] = date("c",fileatime($filepath));
     $info['file_permissions'] = substr(sprintf('%o', fileperms($filepath)), -4);
     $info['date_indexed'] = date("c",time());
+    $info['human_filesize'] = Analyzer::human_filesize($fileInfo['filesize']);
 
     // turn the path into tags
     $info['path_tags'] = $this->path_to_tags($filepath, $fileInfo['filename']); 
@@ -175,5 +176,13 @@ class Analyzer{
         $output[] =  date("j", $base_date);
 
         return $output;
+    }
+
+    public static function human_filesize($bytes, $dec = 2) 
+    {
+        $size   = array(' B', ' kB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
+        $factor = floor((strlen($bytes) - 1) / 3);
+
+        return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . @$size[$factor];
     }
 }

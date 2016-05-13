@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
 
 use Buonzz\Scalp\Searcher;
+use Buonzz\Scalp\Analyzer;
 
 class SearchIndexCommand extends Command
 {
@@ -36,7 +37,7 @@ class SearchIndexCommand extends Command
             
             $data[] = array(
                     $result['filepath'] . '/'. $result['filename'] , 
-                    $this->human_filesize($result['filesize']), 
+                    Analyzer::human_filesize($result['filesize']), 
                     date("n/j/Y g:i A, D", strtotime($result['last_modified'])), 
                     isset($result['DateTimeDigitized']) ? date("n/j/Y g:i A, D", strtotime($result['DateTimeDigitized'])) : null
                     );
@@ -49,14 +50,6 @@ class SearchIndexCommand extends Command
             ->setRows($data);
 
         $table->render();
-    }
-
-    private function human_filesize($bytes, $dec = 2) 
-    {
-        $size   = array(' B', ' kB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
-        $factor = floor((strlen($bytes) - 1) / 3);
-
-        return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . @$size[$factor];
     }
 
 }

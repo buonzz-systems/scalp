@@ -51,7 +51,7 @@ class Searcher{
                     $item['ApertureValue'] = $result_item->_source->exif->ApertureValue;
                     $item['FocalLength'] = $result_item->_source->exif->FocalLength;
                 }
-                
+
                 $item['date_tags'] = implode(", ", $result_item->_source->date_tags);
                 $item['file_contents_hash'] = $result_item->_source->file_contents_hash;
                 $item['width'] = $result_item->_source->width;
@@ -66,7 +66,7 @@ class Searcher{
         return $results;
 
     } //search
-
+    
     public static function build_uri(){
      return '/'. getenv('DB_NAME') .'/'. getenv('DOC_TYPE').'/_search';  
     }
