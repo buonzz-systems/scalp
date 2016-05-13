@@ -39,6 +39,7 @@ use Dotenv\Dotenv;
 
 use Symfony\Component\Console\Application;
 
+use Buonzz\Scalp\WebServer;
 
 
 // defaults
@@ -95,11 +96,7 @@ if (php_sapi_name() == "cli") {
 
 } else {
 
-    ob_start();
-
-    echo "<html><head><style>*{color:#fff;}</style></head><body>Hello</body></html>";
-
-    $data = ob_get_contents();
-    ob_end_flush();
+  $server = new WebServer();
+  echo $server->serve();
+   
 }
-
