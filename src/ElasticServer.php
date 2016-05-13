@@ -74,6 +74,7 @@ class ElasticServer{
                             'playtime_seconds'=> array('type' => "double", 'index' => 'not_analyzed'),
                             'bitrate'=> array('type' => "double", 'index' => 'not_analyzed'),
                             'fileformat'=> array('type' => "string", 'index' => 'not_analyzed')
+                            'human_filesize'=> array('type' => "string")
                         )
                     )
                 )
