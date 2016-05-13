@@ -40,13 +40,18 @@ class Searcher{
                 $item['fileformat'] = $result_item->_source->filesize;
                 $item['filename'] = $result_item->_source->filename;
                 $item['filepath'] = $result_item->_source->filepath;
-                $item['DateTimeDigitized'] = $result_item->_source->exif->DateTimeDigitized;
-                $item['ExposureTime'] = $result_item->_source->exif->ExposureTime;
-                $item['FNumber'] = $result_item->_source->exif->FNumber;
-                $item['ISOSpeedRatings'] = $result_item->_source->exif->ISOSpeedRatings;
-                $item['ShutterSpeedValue'] = $result_item->_source->exif->ShutterSpeedValue;
-                $item['ApertureValue'] = $result_item->_source->exif->ApertureValue;
-                $item['FocalLength'] = $result_item->_source->exif->FocalLength;
+                
+                if(is_object($result_item->_source->exif))
+                {
+                    $item['DateTimeDigitized'] = $result_item->_source->exif->DateTimeDigitized;
+                    $item['ExposureTime'] = $result_item->_source->exif->ExposureTime;
+                    $item['FNumber'] = $result_item->_source->exif->FNumber;
+                    $item['ISOSpeedRatings'] = $result_item->_source->exif->ISOSpeedRatings;
+                    $item['ShutterSpeedValue'] = $result_item->_source->exif->ShutterSpeedValue;
+                    $item['ApertureValue'] = $result_item->_source->exif->ApertureValue;
+                    $item['FocalLength'] = $result_item->_source->exif->FocalLength;
+                }
+                
                 $item['date_tags'] = implode(", ", $result_item->_source->date_tags);
                 $item['file_contents_hash'] = $result_item->_source->file_contents_hash;
                 $item['width'] = $result_item->_source->width;

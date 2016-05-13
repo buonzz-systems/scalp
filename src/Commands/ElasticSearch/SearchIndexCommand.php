@@ -38,7 +38,7 @@ class SearchIndexCommand extends Command
                     $result['filepath'] . '/'. $result['filename'] , 
                     $this->human_filesize($result['filesize']), 
                     date("n/j/Y g:i A, D", strtotime($result['last_modified'])), 
-                    date("n/j/Y g:i A, D", strtotime($result['DateTimeDigitized']))
+                    isset($result['DateTimeDigitized']) ? date("n/j/Y g:i A, D", strtotime($result['DateTimeDigitized'])) : null
                     );
         }
 
