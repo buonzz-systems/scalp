@@ -1,6 +1,7 @@
 <?php namespace Buonzz\Scalp;
 
 use GuzzleHttp\Client;
+use Buonzz\Scalp\ElasticServer;
 
 class Searcher{
 
@@ -9,7 +10,7 @@ class Searcher{
         $results = array();
 
         $client = new Client([
-            'base_uri' => 'http://' .  getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT'),
+            'base_uri' =>  ElasticServer::build_db_uri(),
             'timeout'  => 2.0,
         ]);
 

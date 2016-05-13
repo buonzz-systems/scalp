@@ -6,15 +6,8 @@ use Monolog\Logger;
 class ElasticServer{
 
     public static function build_client(){
-        $hosts = array();
+        $hosts = array(ElasticServer::build_db_uri());
 
-        if (getenv('DB_USERNAME') != 'null' || getenv('DB_PASSWORD') != 'null') {
-           $hosts[] = 'http://' . getenv('DB_USERNAME') . ":" . getenv('DB_PASSWORD') .'@' .getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
-        }
-        else
-        {
-           $hosts[] = 'http://' .  getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
-        }
 
         $log_filename = '/scalp-'. date('Y.m.d.H.i'). '.log';
 
@@ -29,6 +22,20 @@ class ElasticServer{
 
     public static function build_db_name(){
         return getenv('DB_NAME');
+    }
+
+    public static function build_db_uri(){
+        $output = '';
+
+        if (getenv('DB_USERNAME') != 'null' || getenv('DB_PASSWORD') != 'null') {
+           $output = getenv('DB_PROTOCOL') .'://' . getenv('DB_USERNAME') . ":" . getenv('DB_PASSWORD') .'@' .getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
+        }
+        else
+        {
+           $output = getenv('DB_PROTOCOL') .'://' .  getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT');
+        }
+
+        return $output;
     }
 
     public static function get_mappings(){
