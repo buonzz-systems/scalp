@@ -1,8 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-//error_reporting(E_ALL);
-
 $files = array(
   __DIR__ . '/../../vendor/autoload.php',
   __DIR__ . '/../../../../autoload.php',
@@ -43,7 +41,7 @@ use Symfony\Component\Console\Application;
 
 
 
-// defuaults
+// defaults
 $config_items = array('DB_HOSTNAME' => 'localhost', 
                         'DB_NAME' => 'metadata',
                         'DB_USER' => 'null',
@@ -77,18 +75,31 @@ try{
         putenv($k . '=' . $v);
 }
 
-// set default command
-$command = new IndexCommand();
+
+if (php_sapi_name() == "cli") {
+    // set default command
+    $command = new IndexCommand();
 
 
-$application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.4");
-$application->add(new IndexCommand);
-$application->add(new DeleteIndexCommand);
-$application->add(new SearchIndexCommand);
-$application->add(new AnalyzeCommand);
-$application->add(new CreateThumbnailCommand);
-$application->add(new SaveThumbnailsCommand);
+    $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.4");
+    $application->add(new IndexCommand);
+    $application->add(new DeleteIndexCommand);
+    $application->add(new SearchIndexCommand);
+    $application->add(new AnalyzeCommand);
+    $application->add(new CreateThumbnailCommand);
+    $application->add(new SaveThumbnailsCommand);
 
-$application->setDefaultCommand($command->getName());
+    $application->setDefaultCommand($command->getName());
 
-$application->run();
+    $application->run();
+
+} else {
+
+    ob_start();
+
+    echo "<html><head><style>*{color:#fff;}</style></head><body>Hello</body></html>";
+
+    $data = ob_get_contents();
+    ob_end_flush();
+}
+
