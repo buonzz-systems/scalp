@@ -38,7 +38,7 @@ class IndexCommand extends Command
         $counters['new'] =0;
 
         // connect
-        $output->writeln("Establishing connection to ElasticServer at " . getenv('DB_HOSTNAME'));
+        $output->writeln("Establishing connection to ElasticSearch at " . getenv('DB_HOSTNAME'));
 
         try{
 
