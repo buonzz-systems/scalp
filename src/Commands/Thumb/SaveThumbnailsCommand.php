@@ -35,7 +35,9 @@ class SaveThumbnailsCommand extends Command
         $files = MediaFilesList::get($destination_folder);
 
         $client = ElasticServer::build_client();
-        $response = $client->indices()->create($this->get_mappings());
+
+        if(!$this->index_exists($client))
+            $response = $client->indices()->create($this->get_mappings());
         
         foreach($files as $k=>$file)
         {
@@ -119,6 +121,11 @@ class SaveThumbnailsCommand extends Command
         );
 
         return $mappings;
+    }
+
+    private function index_exists($client){
+        $params = ['index' => $this->build_db_name()];
+         return $client->indices()->exists($params);
     }
 
 }
