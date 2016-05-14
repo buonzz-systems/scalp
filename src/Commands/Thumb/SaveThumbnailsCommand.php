@@ -35,6 +35,7 @@ class SaveThumbnailsCommand extends Command
         $files = MediaFilesList::get($destination_folder);
 
         $client = ElasticServer::build_client();
+        $response = $client->indices()->create($this->get_mappings());
         
         foreach($files as $k=>$file)
         {
@@ -101,9 +102,19 @@ class SaveThumbnailsCommand extends Command
             'index' => $this->build_db_name(),
             'body' => array(
                 'settings' => array(
-                    'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 1 ,
+                    'number_of_shards' => getenv('DB_SHARDS') ? getenv('DB_SHARDS'): 2 ,
                     'number_of_replicas' => getenv('DB_REPLICAS') ? getenv('DB_REPLICAS') : 1
-                )
+                ),
+                'mappings' => array(
+                    'thumbnails' => array(
+                          'properties' => array(
+                                'fileid' => array('type'=>'string', 'index' => 'not_analyzed'),
+                                'path' => array('type'=>'string', 'index' => 'not_analyzed'),
+                                'filename' => array('type'=>'string', 'index' => 'not_analyzed'),
+                                'timestamp' => array('type'=>'date', 'index' => 'not_analyzed'),
+                                'data' => array('type'=>'string', 'index' => 'no')
+                            )
+                        ))
             )
         );
 
