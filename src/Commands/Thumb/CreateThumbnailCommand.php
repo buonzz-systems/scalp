@@ -46,7 +46,7 @@ class CreateThumbnailCommand extends Command
 
            $ext = strtolower($file->getExtension()); 
 
-           if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif','bmp')))
+           if(in_array($ext, array('jpg', 'jpeg', 'png')))
            {
 
                 $thumb = new \PHPThumb\GD($file->getRealPath());
