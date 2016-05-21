@@ -52,14 +52,21 @@ class CreateThumbnailCommand extends Command
                if(in_array($ext, array('jpg', 'jpeg', 'png')))
                {
 
-                    $thumb = new \PHPThumb\GD($file->getRealPath());
-                    $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
-
                     $prefix = "thumb-" . str_replace('/', '_sc_',  Analyzer::remove_base_path($file->getPath()) . '/');
-
                     $filename = $destination_folder . "/thumbs/" . $prefix. $file->getFilename();
-                    $thumb->save($filename);
-                    $output->writeln('File processed: <comment>'. $filename .  '</comment>');
+
+                    
+                    if(!file_exists($filename))
+                    {
+                        $thumb = new \PHPThumb\GD($file->getRealPath());
+                        $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
+
+                        $thumb->save($filename);
+                        $output->writeln('File processed: <comment>'. $filename .  '</comment>');
+                    }
+                    else
+                        $output->writeln('thumbnail already present, skipped : <comment>'. $filename .  '</comment>');   
+
                 }
                 else
                     $output->writeln('File skipped: <comment>'. $file->getFilename() .  '</comment>');
