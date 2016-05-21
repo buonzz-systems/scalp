@@ -3,7 +3,7 @@
 class Analyzer{
 
 	// see https://github.com/JamesHeinrich/getID3/blob/master/structure.txt
-	private $desired_properties = array('filesize','bitrate', 'fileformat', 'filename', 'mime_type', 'playtime_seconds', 'playtime_string', 'filepath', 'tags');
+	private $desired_properties = array('filesize','bitrate', 'fileformat', 'filename', 'mime_type', 'playtime_seconds', 'playtime_string', 'tags');
 
 
  public function analyze($filepath, $json_output = FALSE){
@@ -20,6 +20,7 @@ class Analyzer{
     $info['file_permissions'] = substr(sprintf('%o', fileperms($filepath)), -4);
     $info['date_indexed'] = date("c",time());
     $info['human_filesize'] = Analyzer::human_filesize($fileInfo['filesize']);
+    $info['filepath'] = Analyzer::remove_base_path($filepath);
 
     // turn the path into tags
     $info['path_tags'] = $this->path_to_tags($filepath, $fileInfo['filename']); 
@@ -65,7 +66,7 @@ class Analyzer{
 
 
    function path_to_tags($path, $filename){
-       $tmp =  explode("/", $path);
+       $tmp =  explode("/", Analyzer::remove_base_path($path));
        return array_values(array_diff($tmp, array($filename, '')));
    }
 
@@ -185,4 +186,13 @@ class Analyzer{
 
         return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . @$size[$factor];
     }
+
+    public static function remove_base_path($path){
+        $new_path = '';
+
+        $base_path = realpath(getenv('INPUT_FOLDER'));
+        $new_path = str_replace($base_path . '/', '', $path);
+        return $new_path;
+    }
+
 }

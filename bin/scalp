@@ -82,7 +82,7 @@ if (php_sapi_name() == "cli") {
     $command = new IndexCommand();
 
 
-    $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.4");
+    $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.5");
     $application->add(new IndexCommand);
     $application->add(new DeleteIndexCommand);
     $application->add(new SearchIndexCommand);

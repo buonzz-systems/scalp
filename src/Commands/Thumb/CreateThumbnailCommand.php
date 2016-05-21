@@ -44,22 +44,26 @@ class CreateThumbnailCommand extends Command
         foreach($files as $k=>$file)
         {
 
-           $ext = strtolower($file->getExtension()); 
+            try{
+               $ext = strtolower($file->getExtension()); 
 
-           if(in_array($ext, array('jpg', 'jpeg', 'png')))
-           {
+               if(in_array($ext, array('jpg', 'jpeg', 'png')))
+               {
 
-                $thumb = new \PHPThumb\GD($file->getRealPath());
-                $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
+                    $thumb = new \PHPThumb\GD($file->getRealPath());
+                    $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
 
-                $prefix = str_replace('/', '.', $file->getPath()) .".-thumb-";
+                    $prefix = str_replace('/', '.', $file->getPath()) .".-thumb-";
 
-                $filename = $destination_folder . "/thumbs/" . $prefix. $file->getFilename();
-                $thumb->save($filename);
-                $output->writeln('File processed: <comment>'. $file->getFilename() .  '</comment>');
-            }
-            else
-                $output->writeln('File skipped: <comment>'. $file->getFilename() .  '</comment>');   
+                    $filename = $destination_folder . "/thumbs/" . $prefix. $file->getFilename();
+                    $thumb->save($filename);
+                    $output->writeln('File processed: <comment>'. $file->getFilename() .  '</comment>');
+                }
+                else
+                    $output->writeln('File skipped: <comment>'. $file->getFilename() .  '</comment>');
+            }catch(\Exception $e){
+                $output->writeln('<error>'. $e->getMessage() .'</error>');
+            }   
         }
 
          $output->writeln("Success!");

@@ -25,7 +25,11 @@ class DeleteIndexCommand extends Command
         $question = new ConfirmationQuestion('Are you sure you want to delete <comment>"'. getenv('DB_NAME') . '</comment>" database on <comment>' .getenv('DB_HOSTNAME') . ':' . getenv('DB_PORT') . '</comment> ? ( default: no ) ', false);
 
         if ($helper->ask($input, $output, $question)) {
-            ElasticServer::delete_index();        
+            
+            try{
+            ElasticServer::delete_index();
+            }catch(\Exception $e){ ;} 
+
             $output->writeln("Index Deleted!");
         }
         else
