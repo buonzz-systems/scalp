@@ -86,11 +86,14 @@ class SaveThumbnailsCommand extends Command
     private function get_original_file_info($filename){
         $output = array();
 
-        $components = explode(".-thumb-", $filename);
+        $tmp = substr($filename,6);
+        $tmp2 = explode("_sc_", $tmp);
 
-        $output['path'] = str_replace('.', '/', $components[0]);
-        $output['filename'] = $components[1];
-
+        $output['filename'] = $tmp2[count($tmp2)-1];
+        
+        array_pop($tmp2);
+        $output['path'] = implode('/', $tmp2);
+        
         return $output;
     }
 
