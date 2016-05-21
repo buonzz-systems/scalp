@@ -192,6 +192,12 @@ class Analyzer{
 
         $base_path = realpath(getenv('INPUT_FOLDER'));
         $new_path = str_replace($base_path . '/', '', $path);
+        $new_path = str_replace($base_path, '', $path);
+        
+        if(substr($new_path, 0,1) == '/')
+        {
+           $new_path = substr($new_path, 1);
+        }
         return $new_path;
     }
 

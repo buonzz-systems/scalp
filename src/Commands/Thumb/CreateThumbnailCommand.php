@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Buonzz\Scalp\MediaFilesList;
+use Buonzz\Scalp\Analyzer;
 
 class CreateThumbnailCommand extends Command
 {
@@ -14,7 +15,7 @@ class CreateThumbnailCommand extends Command
     {
         $this
             ->setName('thumbnail:create')
-            ->setDescription('create a thumbnail for a given file');
+            ->setDescription('create thumbnails for files inside source folder');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -32,9 +33,10 @@ class CreateThumbnailCommand extends Command
         if(!file_exists($destination_folder))
         {
             mkdir($destination_folder);
-            if(!file_exists($destination_folder . '/thumbs'))
-                mkdir($destination_folder . '/thumbs');
         }
+
+        if(!file_exists($destination_folder . '/thumbs'))
+                mkdir($destination_folder . '/thumbs');
 
         $output->writeln("reading files from " . $source_folder);
         $output->writeln("writing data to "  . $destination_folder . '/thumbs');
@@ -53,11 +55,11 @@ class CreateThumbnailCommand extends Command
                     $thumb = new \PHPThumb\GD($file->getRealPath());
                     $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
 
-                    $prefix = str_replace('/', '.', $file->getPath()) .".-thumb-";
+                    $prefix = "thumb-" . str_replace('/', '.',  Analyzer::remove_base_path($file->getPath()) . '/');
 
                     $filename = $destination_folder . "/thumbs/" . $prefix. $file->getFilename();
                     $thumb->save($filename);
-                    $output->writeln('File processed: <comment>'. $file->getFilename() .  '</comment>');
+                    $output->writeln('File processed: <comment>'. $filename .  '</comment>');
                 }
                 else
                     $output->writeln('File skipped: <comment>'. $file->getFilename() .  '</comment>');
