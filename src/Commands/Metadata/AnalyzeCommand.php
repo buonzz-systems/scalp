@@ -14,7 +14,7 @@ class AnalyzeCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('file:extract')
+            ->setName('metadata:analyze')
             ->setDescription('Read metadata of files to a JSON format');
     }
 

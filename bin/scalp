@@ -91,6 +91,7 @@ if (php_sapi_name() == "cli") {
     $application->add(new IndexCommand);
     $application->add(new CreateThumbnailCommand);
     $application->add(new SaveThumbnailsCommand);
+    $application->add($command);
 
     $application->setDefaultCommand($command->getName());
 
