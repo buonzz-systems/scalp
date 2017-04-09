@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+date_default_timezone_set("UTC");
+
 $files = array(
   __DIR__ . '/../../vendor/autoload.php',
   __DIR__ . '/../../../../autoload.php',
@@ -79,14 +81,14 @@ try{
 
 if (php_sapi_name() == "cli") {
     // set default command
-    $command = new IndexCommand();
+    $command = new AnalyzeCommand();
 
 
     $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.5");
     $application->add(new IndexCommand);
     $application->add(new DeleteIndexCommand);
     $application->add(new SearchIndexCommand);
-    $application->add(new AnalyzeCommand);
+    $application->add(new IndexCommand);
     $application->add(new CreateThumbnailCommand);
     $application->add(new SaveThumbnailsCommand);
 

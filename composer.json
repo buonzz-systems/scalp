@@ -2,7 +2,7 @@
     "name": "buonzz/scalp",
     "description": "Command line tool to Analyze and store your Media file's metadata",
     "license": "MIT",
-    "keywords": ["getID3", "media files", "video", "image", "content management", "mongodb import"],
+    "keywords": ["getID3", "media files", "video", "image", "content management", "elasticsearch"],
     "authors": [
         {
             "name": "Darwin Biler",
