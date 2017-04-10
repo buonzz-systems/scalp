@@ -21,7 +21,7 @@ class IndexCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('index')
+            ->setName('es:index')
             ->setDescription('Read and index a certain directory to ElasticSearch');
     }
 

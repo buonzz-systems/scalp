@@ -18,7 +18,8 @@
         "monolog/monolog": "^1.19",
         "masterexploder/phpthumb": "^2.1",
         "symfony/stopwatch": "^3.0",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "cwhite92/b2-sdk-php": "^1.2"
     },
 	"autoload": {
         "psr-4": {
