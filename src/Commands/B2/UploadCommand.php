@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Buonzz\Scalp\Analyzer;
 use Buonzz\Scalp\MediaFilesList;
+use Buonzz\Scalp\ExcludedContents;
 
 use ChrisWhite\B2\Client;
 use ChrisWhite\B2\Bucket;
@@ -18,7 +19,11 @@ class UploadCommand extends Command
     {
         $this
             ->setName('b2:upload')
-            ->setDescription('Uploads files to BackBlaze');
+            ->setDescription('Uploads files to BackBlaze')
+            ->addArgument(
+            'bucket',
+            InputArgument::REQUIRED,
+            'Enter the Bucket name where you want to upload the files');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -30,6 +35,7 @@ class UploadCommand extends Command
         $destination_folder = getenv('OUTPUT_FOLDER');
         $account_id = getenv('B2_ACCOUNT_ID');
         $application_key = getenv('B2_APPLICATION_KEY');
+        $bucket_name = $input->getArgument('bucket');
 
         if(!file_exists($source_folder))
         {        $output->writeln('<error>the "'. $source_folder .'" folder doesn\'t exists!</error>');
@@ -52,6 +58,10 @@ class UploadCommand extends Command
             $info = json_decode($data);
 
             $filename = $info->file_contents_hash . ".json";
+
+            if(file_exists($destination_folder . '/'. $filename))
+                continue;
+
             $output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
             file_put_contents($destination_folder . '/'. $filename, $data);
             
@@ -91,9 +101,26 @@ class UploadCommand extends Command
             }
 
             $output->writeln('<comment>'. $file->getFilename() .  '</comment> pre-processed');
+        }
 
-            
+        $output->writeln('Connecting to BackBlaze using account_id: ' . $account_id);
 
+        $b2_client = new Client($account_id, $application_key);
+
+
+        // get all files on destination folder
+        $files_to_upload = scandir($destination_folder);
+
+        foreach($files_to_upload as $file_to_upload){
+
+            if (!in_array($file_to_upload,ExcludedContents::get())){
+                $output->writeln('Uploading : ' . $file_to_upload);            
+                 $file = $b2_client->upload([
+                    'BucketName' => $bucket_name,
+                    'FileName' => $file_to_upload,
+                    'Body' => fopen($destination_folder . "/" . $file_to_upload, 'r')
+                ]);
+            }
         }
 
          $output->writeln("Success!");

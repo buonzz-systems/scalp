@@ -7,6 +7,6 @@ class ExcludedContents{
 					 '.DS_Store', '.git', 
 					 'composer.lock', 'vendor', 
 					 'npm_modules', '.bash_profile', '.ssh', 
-					 '.composer');
+					 '.composer', '.gitkeep', '.gitignore');
 	}
 }
