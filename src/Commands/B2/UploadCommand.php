@@ -52,32 +52,57 @@ class UploadCommand extends Command
             $info = json_decode($data);
 
             $filename = $info->file_contents_hash . ".json";
-            $output->writeln('<comment>'. $filename .  ' metadata extracted </comment>');
+            $output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
             file_put_contents($destination_folder . '/'. $filename, $data);
             
             $ext = strtolower($file->getExtension());
             
             if($info->width > 500 || $info->height > 500)
             {
+                $output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> resized before upload ');
+                
+                //thumbnail
+                $this->resize($file->getRealPath(), 10, $destination_folder . '/'. $info->file_contents_hash . "-small." . $ext);
 
-                $thumb = new \PHPThumb\GD($file->getRealPath());
-                $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
-                $output->writeln('<comment>'. $filename .  ' resizing before upload </comment>');
-                $thumb->save($destination_folder . '/'. $info->file_contents_hash . "." . $ext);
+                //medium
+                $this->resize($file->getRealPath(), 30, $destination_folder . '/'. $info->file_contents_hash . "-med." . $ext);
+
+                //large
+                $this->resize($file->getRealPath(), 50, $destination_folder . '/'. $info->file_contents_hash . "-large." . $ext);
             }
             else
             {
-                $output->writeln('<comment>'. $filename .  ' retained original size </comment>');
+                $output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> retained original size');
+
                 copy(
                         $file->getRealPath(), 
-                        $destination_folder . '/'. $info->file_contents_hash . "." . $ext
+                        $destination_folder . '/'. $info->file_contents_hash . "-small." . $ext
                     );  
+
+                copy(
+                        $file->getRealPath(), 
+                        $destination_folder . '/'. $info->file_contents_hash . "-medium." . $ext
+                    ); 
+
+                copy(
+                        $file->getRealPath(), 
+                        $destination_folder . '/'. $info->file_contents_hash . "-large." . $ext
+                    );
             }
 
-            $output->writeln('<comment>'. $file->getFilename() .  ' processed </comment>');
+            $output->writeln('<comment>'. $file->getFilename() .  '</comment> pre-processed');
+
+            
+
         }
 
          $output->writeln("Success!");
+    }
+
+    private function resize($file, $percent, $target){
+        $thumb = new \PHPThumb\GD($file);
+        $thumb->resizePercent($percent);
+        $thumb->save($target);
     }
 
 }
