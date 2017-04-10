@@ -48,10 +48,32 @@ class UploadCommand extends Command
         foreach($files as $k=>$file)
         {
             $data = $analyzer->analyze($file->getRealPath(),true);
-            $prefix = str_replace('/', '.', $file->getPath()) .".";
+            
+            $info = json_decode($data);
 
-            $filename = $destination_folder . "/" . $prefix. $file->getFilename() . ".json";
-            file_put_contents($filename, $data);
+            $filename = $info->file_contents_hash . ".json";
+            $output->writeln('<comment>'. $filename .  ' metadata extracted </comment>');
+            file_put_contents($destination_folder . '/'. $filename, $data);
+            
+            $ext = strtolower($file->getExtension());
+            
+            if($info->width > 500 || $info->height > 500)
+            {
+
+                $thumb = new \PHPThumb\GD($file->getRealPath());
+                $thumb->resizePercent(getenv('THUMB_PERCENT_RESIZE'));
+                $output->writeln('<comment>'. $filename .  ' resizing before upload </comment>');
+                $thumb->save($destination_folder . '/'. $info->file_contents_hash . "." . $ext);
+            }
+            else
+            {
+                $output->writeln('<comment>'. $filename .  ' retained original size </comment>');
+                copy(
+                        $file->getRealPath(), 
+                        $destination_folder . '/'. $info->file_contents_hash . "." . $ext
+                    );  
+            }
+
             $output->writeln('<comment>'. $file->getFilename() .  ' processed </comment>');
         }
 

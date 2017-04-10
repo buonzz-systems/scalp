@@ -92,6 +92,49 @@ To generate static JSON files
 scalp file:extract
 ```
 
+Sample extracted metadata
+
+```
+{
+   "last_modified":"2017-03-25T12:10:39+00:00",
+   "last_accessed":"2017-04-09T12:07:11+00:00",
+   "file_permissions":"0644",
+   "date_indexed":"2017-04-10T03:04:23+00:00",
+   "human_filesize":"974.83 kB",
+   "filepath":"IMG_1123.JPG",
+   "path_tags":[
+
+   ],
+   "filesize":"998225",
+   "fileformat":"jpg",
+   "filename":"IMG_1123.JPG",
+   "mime_type":"image\/jpeg",
+   "exif":{
+      "DateTimeDigitized":"2016-05-17T16:19:26+00:00",
+      "ExposureTime":0.016666666666667,
+      "FNumber":4,
+      "ISOSpeedRatings":200,
+      "ShutterSpeedValue":6,
+      "ApertureValue":4,
+      "FocalLength":20
+   },
+   "date_tags":[
+      "Tue",
+      "17th",
+      "Tuesday",
+      "May",
+      "May",
+      "2016",
+      "4pm",
+      "UTC",
+      "17"
+   ],
+   "file_contents_hash":"4c7e796bc250b14fe7964694c4db5852eca34ddee24991371f848c3e8097436d",
+   "width":"1920",
+   "height":"1280"
+}
+```
+
 #### ES Command
 
 Load it to ElasticSearch
@@ -125,17 +168,6 @@ php -S localhost:8080 /usr/local/bin/scalp
 ``` 
 then in your localhost, just append the url given by search command.
 
-### Testing Indexed documents
-
-To show all indexes
-```
-curl 'localhost:9200/_cat/indices?v'
-```
-
-To list all documents
-```
-curl -XGET 'localhost:9200/[your index name]/_search?pretty=true&q=*:*'
-```
 
 #### Re-compile the phar file
 
