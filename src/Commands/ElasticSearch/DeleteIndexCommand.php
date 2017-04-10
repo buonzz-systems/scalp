@@ -14,7 +14,7 @@ class DeleteIndexCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('delete')
+            ->setName('es:delete')
             ->setDescription('delete ElasticSearch index');
     }
 

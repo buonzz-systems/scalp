@@ -15,7 +15,7 @@ class SearchIndexCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('search')
+            ->setName('es:search')
             ->setDescription('search files on ElasticSearch')
             ->addArgument(
             'keywords',
