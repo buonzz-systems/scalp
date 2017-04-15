@@ -99,7 +99,8 @@ class GenerateCommand extends Command
             
             }
             catch(\Exception $e){
-                $output->writeln($e->getMessage());    
+                $output->writeln($e->getMessage());   
+                continue; 
             }
 
         } // end for each
