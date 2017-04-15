@@ -44,6 +44,8 @@ class GenerateCommand extends Command
         
         foreach($files as $k=>$file)
         {
+            //try {
+
             $data = $analyzer->analyze($file->getRealPath(),true);
             
             $info = json_decode($data);
@@ -94,7 +96,13 @@ class GenerateCommand extends Command
              $output_file_list[$info->file_contents_hash] = $info->filepath;
 
             $output->writeln('<comment>'. $file->getFilename() .  '</comment> pre-processed');
-        }
+            
+            }
+            catch(\Exception $e){
+                $output->writeln($e->getMessage());    
+            }
+
+        } // end for each
 
          $output->writeln("Writing summary file");
         $file = fopen($destination_folder . "/files.json","w");
@@ -102,6 +110,9 @@ class GenerateCommand extends Command
         fclose($file);
 
          $output->writeln("Success!");
+
+     }
+
     }
 
     private function resize($file, $percent, $target){
