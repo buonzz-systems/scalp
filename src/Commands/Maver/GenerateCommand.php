@@ -115,8 +115,6 @@ class GenerateCommand extends Command
 
      }
 
-    }
-
     private function resize($file, $percent, $target){
         $thumb = new \PHPThumb\GD($file);
         $thumb->resizePercent($percent);
