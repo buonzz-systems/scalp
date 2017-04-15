@@ -44,7 +44,8 @@ class GenerateCommand extends Command
         
         foreach($files as $k=>$file)
         {
-            //try {
+            
+            try {
 
             $data = $analyzer->analyze($file->getRealPath(),true);
             
