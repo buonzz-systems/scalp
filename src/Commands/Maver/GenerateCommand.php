@@ -46,9 +46,6 @@ class GenerateCommand extends Command
         {
             $data = $analyzer->analyze($file->getRealPath(),true);
             
-            var_dump($data);
-            die;
-
             $info = json_decode($data);
 
             $filename = $info->file_contents_hash . ".json";
@@ -63,7 +60,7 @@ class GenerateCommand extends Command
             
             if($info->width > 500 || $info->height > 500)
             {
-                $output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> resized before upload ');
+                $output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> resized');
                 
                 //thumbnail
                 $this->resize($file->getRealPath(), 10, $destination_folder . '/'. $info->file_contents_hash . "-small." . $ext);
@@ -94,8 +91,15 @@ class GenerateCommand extends Command
                     );
             }
 
+             $output_file_list[$info->file_contents_hash] = $info->filepath;
+
             $output->writeln('<comment>'. $file->getFilename() .  '</comment> pre-processed');
         }
+
+         $output->writeln("Writing summary file");
+        $file = fopen($destination_folder . "/files.json","w");
+        fwrite($file, json_encode($output_file_list));
+        fclose($file);
 
          $output->writeln("Success!");
     }
