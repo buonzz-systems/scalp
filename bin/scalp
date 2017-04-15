@@ -38,6 +38,8 @@ use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
 
 use Buonzz\Scalp\Commands\B2\UploadCommand;
 
+use Buonzz\Scalp\Commands\Maver\GenerateCommand;
+
 use Buonzz\Scalp\Commands\Thumb\CreateThumbnailCommand;
 use Buonzz\Scalp\Commands\Thumb\SaveThumbnailsCommand;
 use Dotenv\Dotenv;
@@ -94,6 +96,7 @@ if (php_sapi_name() == "cli") {
     $application->add(new IndexCommand);
     $application->add(new CreateThumbnailCommand);
     $application->add(new SaveThumbnailsCommand);
+    $application->add(new GenerateCommand);
     $application->add(new UploadCommand);
     $application->add($command);
 
