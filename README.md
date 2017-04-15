@@ -167,24 +167,3 @@ You can get a preview of those thumbnails by using the PHP's built in web server
 php -S localhost:8080 /usr/local/bin/scalp
 ``` 
 then in your localhost, just append the url given by search command.
-
-
-#### Re-compile the phar file
-
-```
-./build.sh
-```
-
-this will generate a scalp.phar in dist folder. You can run the file by executing
-
-```
-php scalp.phar
-```
-
-Or to just install it globally:
-
-```
-sudo mv dist/scalp.phar  /usr/local/bin/scalp
-chmod +x /usr/local/bin/scalp
-scalp -V
-```
