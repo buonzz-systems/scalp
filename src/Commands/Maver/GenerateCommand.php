@@ -54,18 +54,18 @@ class GenerateCommand extends Command
             
             try {
 
+
+            $data = $analyzer->analyze($file->getRealPath(),true);
+            
+            $info = json_decode($data);
+            $filename = $info->file_contents_hash . ".json";
+
             // if this is been processed already, skip it.
             if(array_key_exists($info->file_contents_hash, $output_file_list))
             {
                 $output->writeln('<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
                 continue;
             }
-
-            $data = $analyzer->analyze($file->getRealPath(),true);
-            
-            $info = json_decode($data);
-
-            $filename = $info->file_contents_hash . ".json";
 
             $output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
             file_put_contents($destination_folder . '/'. $filename, $data);
