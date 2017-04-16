@@ -3,6 +3,8 @@ Scalp
 
 Command line tool to Analyze and store your Media file's metadata 
 
+![scalp architecture diagram](https://assets.buonzz.com/scalp-architecture.png)
+
 Install
 =======
 
