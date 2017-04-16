@@ -6,8 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Buonzz\Scalp\Analyzer;
-use Buonzz\Scalp\MediaFilesList;
+use Buonzz\Scalp\MetadataGenerator;
 
 class AnalyzeCommand extends Command
 {
@@ -21,8 +20,6 @@ class AnalyzeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $analyzer = new Analyzer();
-
         $source_folder = getenv('INPUT_FOLDER');
         $destination_folder = getenv('OUTPUT_FOLDER');
 
@@ -38,18 +35,10 @@ class AnalyzeCommand extends Command
 
         $output->writeln("reading files from " . $source_folder);
         $output->writeln("writing data to "  . $destination_folder);
-        $files = MediaFilesList::get($source_folder);
+
+        $generator = new MetadataGenerator($source_folder, $destination_folder, $output);
+        $generator->generate();
         
-        foreach($files as $k=>$file)
-        {
-            $data = $analyzer->analyze($file->getRealPath(),true);
-            $prefix = str_replace('/', '.', $file->getPath()) .".";
-
-            $filename = $destination_folder . "/" . $prefix. $file->getFilename() . ".json";
-            file_put_contents($filename, $data);
-            $output->writeln('<comment>'. $file->getFilename() .  ' processed </comment>');
-        }
-
          $output->writeln("Success!");
     }
 
