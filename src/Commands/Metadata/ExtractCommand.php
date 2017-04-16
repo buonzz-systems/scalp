@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Buonzz\Scalp\MetadataGenerator;
 
-class AnalyzeCommand extends Command
+class ExtractCommand extends Command
 {
     protected function configure()
     {

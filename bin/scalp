@@ -31,7 +31,7 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 
 
-use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
+use Buonzz\Scalp\Commands\Metadata\ExtractCommand;
 use Buonzz\Scalp\Commands\B2\UploadCommand;
 use Buonzz\Scalp\Commands\Maver\GenerateCommand;
 use Buonzz\Scalp\Commands\Thumb\CreateThumbnailCommand;
@@ -64,7 +64,7 @@ try{
         putenv($k . '=' . $v);
 }
 
-  $command = new AnalyzeCommand();
+  $command = new ExtractCommand();
 
   $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.5");
 
