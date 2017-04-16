@@ -1,9 +1,34 @@
 Scalp
 =====
 
-Command line tool to Analyze and store your Media file's metadata 
+Command line tool to Analyze and store your Media file's metadata.<br/>
+
+Do you or your organization have a bunch of images/videos lumped into some hard drive?. If those are stored in a non-structured way, like there is no real scheme on how it is organized (by date, by album etc). Performing analysis and retrieving a certain set of files will be really tough to do.
+
+Scalp allows you analyze and extract a lot of information from those bunch of media files and build "something" out of that data. It is purely a backend tool that is designed to support any kind of application you might be developing on that top of the extracted info. <br/>
+
+Few situations it could be useful:
+
+* Build a private Search engine, that allows user to input certain keywords and return a list of files matching that keyword
+* Use as a backend store for your CMS
+* Generate thumbnails (small/medium/large) and host the processed files to CDN
+
+Below is the overview of how Scalp works
 
 ![scalp architecture diagram](https://assets.buonzz.com/scalp-architecture.png)
+
+* Your media files can be stored in the same server or a dedicated NAS server (needs to be mounted to a location where scalp can access it )
+* Scalp reads the files and extract Metadata from it (represented as JSON object)
+* Scalp generates thumbnails (small/medium/large)
+* The data processed can then be forwarded to any of the supported backend storage (File, ElasticSearch, S3, BackBlaze etc)
+* Your application accesses the processed data via those backend storage 
+
+### Advantages
+
+* You can continously re-organize how the files is presented to your users without having to physically move around the actual files. Since the representation can be abstracted by the Application itself
+* Your raw images/videos is left untouched (Scalp never move, resize or modify its properties)
+* Saves a lot of bandwidth, since instead of serving the raw images while browsing items. You can just use the thumbnails created by Scalp. and only access the raw (usually big file) image when user requested.
+
 
 Install
 =======
