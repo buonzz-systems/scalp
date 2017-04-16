@@ -29,7 +29,8 @@ class GenerateCommand extends Command
         $output_file_list = [];
 
         if(!file_exists($source_folder))
-        {        $output->writeln('<error>the "'. $source_folder .'" folder doesn\'t exists!</error>');
+        {        
+            $output->writeln('<error>the "'. $source_folder .'" folder doesn\'t exists!</error>');
             exit;
         }
 
@@ -43,7 +44,10 @@ class GenerateCommand extends Command
         $files = MediaFilesList::get($source_folder);
 
         if(file_exists($destination_folder . '/'. "files.json"))
-            $output_file_list = json_decode(file_get_contents($destination_folder . '/'. "files.json"), true);
+        {
+            $output_file_list = json_decode(
+                file_get_contents($destination_folder . '/'. "files.json"), true);
+        }
 
         foreach($files as $k=>$file)
         {
@@ -52,7 +56,10 @@ class GenerateCommand extends Command
 
             // if this is been processed already, skip it.
             if(array_key_exists($info->file_contents_hash, $output_file_list))
+            {
+                $output->writeln('<info> skipped "'. $file->filepath .'</info>');
                 continue;
+            }
 
             $data = $analyzer->analyze($file->getRealPath(),true);
             
