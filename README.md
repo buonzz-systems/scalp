@@ -69,6 +69,14 @@ Scalp can extract the metadata information from your media files and export it t
 * Static JSON files
 * ElasticSearch Server
 
+
+Running in the background
+
+```
+nohup scalp maver:generate > scalp.log &
+```
+
+
 First, you need to create a configuration file called .env This will be used by scalp to retrieve certain information:
 
 | Setting       | Description                                                                                              | Default        |
