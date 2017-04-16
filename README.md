@@ -225,6 +225,8 @@ then in your localhost, just append the url given by search command.
 B2 is a great way to store both your metadata and thumbnails if you plan to serve those data in a web site with high traffic. It is way cheaper than the other alternative, plus it offers you a free 10GB initial storage so you don't really need to pay anything unless you decide to upload more contents. <br/>
 
 Provide the following entries in your *.env* file prior to using the BackBlaze
+
+
 | Setting            | Value                            |
 |--------------------|----------------------------------|
 | B2_ACCOUNT_ID      | your BackBlaze account ID        |
