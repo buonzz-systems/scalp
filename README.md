@@ -108,22 +108,15 @@ First, you need to create a configuration file called .env This will be used by 
 | Setting              | Description                                                                                                      | Default        |
 |----------------------|------------------------------------------------------------------------------------------------------------------|----------------|
 | INPUT_FOLDER         | the folder on which to read the files to analyze                                                                 | current folder |
-| OUTPUT_FOLDER        | where to dump the JSON files                                                | dist           |
+| OUTPUT_FOLDER        | where to dump the JSON files / thumbnails                                                | dist           |
 | THUMB_PERCENT_RESIZE | Used when creating thumbnails, this should be between 10-100, the images will be resized with this percent value | 10             |
 
 
-Running in the background
-
-```
-nohup scalp maver:generate > scalp.log &
-```
-
-
-#### File Command
+#### Metadata Extraction
 
 To generate static JSON files
 ```
-scalp file:extract
+scalp metadata:extract
 ```
 
 Sample extracted metadata
@@ -169,10 +162,26 @@ Sample extracted metadata
 }
 ```
 
-#### ES Command
+#### Thumbnail Creation
+
+```
+scalp thumbnail:create
+```
+
+### Running in the background
+
+If you got a relatively large collection of media files. It might take hours for the process to complete. You can place the process in the background, so that it will continue to execute even after you had logged out in the terminal.
+
+```
+nohup scalp metadata:extract > scalp.log &
+nohup scalp thumbnail:create > scalp.log &
+```
+
 
 
 ### ElasticSearch As a backend
+
+When using ElasticSearch as a backend. Make sure to provide the following entries in your .env file
 
 | Setting     | Description                                                                                              | Default   |
 |-------------|----------------------------------------------------------------------------------------------------------|-----------|
@@ -189,18 +198,6 @@ Sample extracted metadata
 Load it to ElasticSearch
 ```
 scalp es:index
-```
-
-or just simply
-```
-scalp
-```
-
-#### Thumb Command
-
-create thumbnails
-```
-scalp thumb:create
 ```
 
 Save thumbnails to ElasticSearch
