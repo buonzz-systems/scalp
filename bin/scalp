@@ -31,41 +31,22 @@ if (!defined('SCALP_COMPOSER_INSTALL')) {
 
 
 
-use Buonzz\Scalp\Commands\ElasticSearch\IndexCommand;
-use Buonzz\Scalp\Commands\ElasticSearch\DeleteIndexCommand;
-use Buonzz\Scalp\Commands\ElasticSearch\SearchIndexCommand;
 use Buonzz\Scalp\Commands\Metadata\AnalyzeCommand;
-
 use Buonzz\Scalp\Commands\B2\UploadCommand;
-
 use Buonzz\Scalp\Commands\Maver\GenerateCommand;
-
 use Buonzz\Scalp\Commands\Thumb\CreateThumbnailCommand;
 use Buonzz\Scalp\Commands\Thumb\SaveThumbnailsCommand;
 use Dotenv\Dotenv;
 
 use Symfony\Component\Console\Application;
 
-use Buonzz\Scalp\WebServer;
-
-
 // defaults
-$config_items = array('DB_HOSTNAME' => 'localhost', 
-                        'DB_NAME' => 'metadata',
-                        'DB_USER' => 'null',
-                        'DB_USER' => 'null',
-                        'DOC_TYPE' => 'files',
-                        'DB_PORT' => 9200,
-                        'DB_USER' => 'null',
+$config_items = array(
                         'INPUT_FOLDER' => './',
                         'OUTPUT_FOLDER' => './dist',
                         'LOG_FOLDER' => './',
-                        'DB_SHARDS' => 1,
-                        'DB_REPLICAS' => 1,
-                        'THUMB_PERCENT_RESIZE' => 10,
-                        'DB_PROTOCOL' => 'http'
+                        'THUMB_PERCENT_RESIZE' => 10
                         );
-
 
 try{
 
@@ -83,30 +64,15 @@ try{
         putenv($k . '=' . $v);
 }
 
+  $command = new AnalyzeCommand();
 
-if (php_sapi_name() == "cli") {
-    // set default command
-    $command = new AnalyzeCommand();
+  $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.5");
+
+  $application->add(new CreateThumbnailCommand);
+  $application->add(new SaveThumbnailsCommand);
+  $application->add(new GenerateCommand);
+  $application->add(new UploadCommand);
+  $application->add($command);
 
 
-    $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.0.5");
-    $application->add(new IndexCommand);
-    $application->add(new DeleteIndexCommand);
-    $application->add(new SearchIndexCommand);
-    $application->add(new IndexCommand);
-    $application->add(new CreateThumbnailCommand);
-    $application->add(new SaveThumbnailsCommand);
-    $application->add(new GenerateCommand);
-    $application->add(new UploadCommand);
-    $application->add($command);
-
-    //$application->setDefaultCommand($command->getName());
-
-    $application->run();
-
-} else {
-
-  $server = new WebServer();
-  $id = isset($_GET['id']) ? $_GET['id'] : null;
-  echo $server->serve($id);
-}
+  $application->run();
