@@ -41,20 +41,24 @@ class GenerateCommand extends Command
         $output->writeln("reading files from " . $source_folder);
         $output->writeln("writing data to "  . $destination_folder);
         $files = MediaFilesList::get($source_folder);
-        
+
+        if(file_exists($destination_folder . '/'. "files.json"))
+            $output_file_list = json_decode(file_get_contents($destination_folder . '/'. "files.json"), true);
+
         foreach($files as $k=>$file)
         {
             
             try {
+
+            // if this is been processed already, skip it.
+            if(array_key_exists($info->file_contents_hash, $output_file_list))
+                continue;
 
             $data = $analyzer->analyze($file->getRealPath(),true);
             
             $info = json_decode($data);
 
             $filename = $info->file_contents_hash . ".json";
-
-            if(file_exists($destination_folder . '/'. $filename))
-                continue;
 
             $output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
             file_put_contents($destination_folder . '/'. $filename, $data);
