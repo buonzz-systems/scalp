@@ -71,6 +71,8 @@ class ThumbnailGenerator extends BaseGenerator{
 
         }
 
+        return $this->output_file_list;
+
 	} // generate
 
     private function resize($file, $percent, $target){
