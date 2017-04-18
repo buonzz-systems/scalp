@@ -14,8 +14,18 @@ class MetadataGenerator extends BaseGenerator{
         {
             
             try {
+
             	$data = $this->analyzer->analyze($file->getRealPath(),true);
             	$info = json_decode($data);
+
+                 // if this is been processed already, skip it.
+                if(array_key_exists($info->file_contents_hash, $this->output_file_list))
+                {
+                    $output->writeln('<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
+                    continue;
+                }
+
+
             	$filename = $info->file_contents_hash . ".json";
 	            $this->output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
 	            file_put_contents($this->output_folder . '/'. $filename, $data);
@@ -26,6 +36,8 @@ class MetadataGenerator extends BaseGenerator{
             }
 
         }
+
+        return $this->output_file_list;
 
 	} // generate
 }

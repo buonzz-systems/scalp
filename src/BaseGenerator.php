@@ -29,6 +29,7 @@ class BaseGenerator{
             $this->output_file_list = json_decode(
                 file_get_contents($this->output_folder . '/'. "files.json"), true);
         }
+
 	}
 
 }

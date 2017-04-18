@@ -6,9 +6,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Buonzz\Scalp\Analyzer;
-use Buonzz\Scalp\MediaFilesList;
-use Buonzz\Scalp\ExcludedContents;
+use Buonzz\Scalp\ThumbnailGenerator;
+use Buonzz\Scalp\MetadataGenerator;
 
 class GenerateCommand extends Command
 {
@@ -22,11 +21,8 @@ class GenerateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $analyzer = new Analyzer();
-
         $source_folder = getenv('INPUT_FOLDER');
         $destination_folder = getenv('OUTPUT_FOLDER');
-        $output_file_list = [];
 
         if(!file_exists($source_folder))
         {        
@@ -41,83 +37,16 @@ class GenerateCommand extends Command
 
         $output->writeln("reading files from " . $source_folder);
         $output->writeln("writing data to "  . $destination_folder);
-        $files = MediaFilesList::get($source_folder);
 
-        if(file_exists($destination_folder . '/'. "files.json"))
-        {
-            $output_file_list = json_decode(
-                file_get_contents($destination_folder . '/'. "files.json"), true);
-        }
+        $output_file_list = [];
+        $metadata_generator = new MetadataGenerator($source_folder, $destination_folder, $output);
+        $output_file_list = array_merge($output_file_list, $metadata_generator->generate());
 
-        foreach($files as $k=>$file)
-        {
-            
-            try {
+        $thumb_generator = new ThumbnailGenerator($source_folder, $destination_folder, $output);
+        $output_file_list = array_merge($output_file_list, $thumb_generator->generate());
 
 
-            $data = $analyzer->analyze($file->getRealPath(),true);
-            
-            $info = json_decode($data);
-            $filename = $info->file_contents_hash . ".json";
-
-            // if this is been processed already, skip it.
-            if(array_key_exists($info->file_contents_hash, $output_file_list))
-            {
-                $output->writeln('<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
-                continue;
-            }
-
-            $output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
-            file_put_contents($destination_folder . '/'. $filename, $data);
-            
-            $ext = strtolower($file->getExtension());
-            
-            if($info->width > 500 || $info->height > 500)
-            {
-                $output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> resized');
-                
-                //thumbnail
-                $this->resize($file->getRealPath(), 10, $destination_folder . '/'. $info->file_contents_hash . "-small." . $ext);
-
-                //medium
-                $this->resize($file->getRealPath(), 30, $destination_folder . '/'. $info->file_contents_hash . "-med." . $ext);
-
-                //large
-                $this->resize($file->getRealPath(), 50, $destination_folder . '/'. $info->file_contents_hash . "-large." . $ext);
-            }
-            else
-            {
-                $output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> retained original size');
-
-                copy(
-                        $file->getRealPath(), 
-                        $destination_folder . '/'. $info->file_contents_hash . "-small." . $ext
-                    );  
-
-                copy(
-                        $file->getRealPath(), 
-                        $destination_folder . '/'. $info->file_contents_hash . "-medium." . $ext
-                    ); 
-
-                copy(
-                        $file->getRealPath(), 
-                        $destination_folder . '/'. $info->file_contents_hash . "-large." . $ext
-                    );
-            }
-
-             $output_file_list[$info->file_contents_hash] = $info->filepath;
-
-            $output->writeln('<comment>'. $file->getFilename() .  '</comment> pre-processed');
-            
-            }
-            catch(\Exception $e){
-                $output->writeln($e->getMessage());   
-                continue; 
-            }
-
-        } // end for each
-
-         $output->writeln("Writing summary file");
+        $output->writeln("Writing summary file");
         $file = fopen($destination_folder . "/files.json","w");
         fwrite($file, json_encode($output_file_list));
         fclose($file);
@@ -125,11 +54,5 @@ class GenerateCommand extends Command
          $output->writeln("Success!");
 
      }
-
-    private function resize($file, $percent, $target){
-        $thumb = new \PHPThumb\GD($file);
-        $thumb->resizePercent($percent);
-        $thumb->save($target);
-    }
 
 }

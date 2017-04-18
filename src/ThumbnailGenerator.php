@@ -12,11 +12,18 @@ class ThumbnailGenerator extends BaseGenerator{
 
         foreach($this->files as $k=>$file)
         {
-            
+
             try {
 
             	$data = $this->analyzer->analyze($file->getRealPath(),true);
             	$info = json_decode($data);
+
+                 // if this is been processed already, skip it.
+                if(array_key_exists($info->file_contents_hash, $this->output_file_list))
+                {
+                    $output->writeln('<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
+                    continue;
+                }
 
                 $ext = strtolower($file->getExtension());
 
