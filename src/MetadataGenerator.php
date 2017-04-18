@@ -21,13 +21,15 @@ class MetadataGenerator extends BaseGenerator{
                  // if this is been processed already, skip it.
                 if(array_key_exists($info->file_contents_hash, $this->output_file_list))
                 {
-                    $output->writeln('<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
+                    $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . '<info> skipped "'
+                            . $file->getPath() . "/" . $file->getFilename() .'</info>');
                     continue;
                 }
 
 
             	$filename = $info->file_contents_hash . ".json";
-	            $this->output->writeln('<comment>'. $filename .  '</comment> metadata extracted');
+	            $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . '<comment>'. 
+                        $filename .  '</comment> metadata extracted');
 	            file_put_contents($this->output_folder . '/'. $filename, $data);
         	}
             catch(\Exception $e){

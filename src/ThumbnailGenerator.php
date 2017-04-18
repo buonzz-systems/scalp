@@ -21,7 +21,7 @@ class ThumbnailGenerator extends BaseGenerator{
                  // if this is been processed already, skip it.
                 if(array_key_exists($info->file_contents_hash, $this->output_file_list))
                 {
-                    $output->writeln('<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
+                    $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . '<info> skipped "'. $file->getPath() . "/" . $file->getFilename() .'</info>');
                     continue;
                 }
 
@@ -30,7 +30,7 @@ class ThumbnailGenerator extends BaseGenerator{
 
                 if($info->width > 500 || $info->height > 500)
                 {
-                    $this->output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> resized');
+                    $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . '<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> resized');
                     
                     //thumbnail
                     $this->resize($file->getRealPath(), 10, $this->output_folder . '/'. $info->file_contents_hash . "-small." . $ext);
@@ -43,7 +43,7 @@ class ThumbnailGenerator extends BaseGenerator{
                 }
                 else
                 {
-                    $this->output->writeln('<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> retained original size');
+                    $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . '<comment>'. $info->file_contents_hash . "." . $ext .  '</comment> retained original size');
 
                     copy(
                             $file->getRealPath(), 
@@ -65,7 +65,7 @@ class ThumbnailGenerator extends BaseGenerator{
 
         	}
             catch(\Exception $e){
-                $this->output->writeln($e->getMessage());   
+                $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" .  "skipped: ". $e->getMessage()) ;   
                 continue; 
             }
 
