@@ -235,8 +235,11 @@ Provide the following entries in your *.env* file prior to using the BackBlaze
 Then execute the following to extract, create thumbnail and upload the data to B2:
 
 ```
-scalp b2:upload
+scalp b2:upload scalp-test dist
 ```
+
+the first parameter (scalp-test) is the bucket name you created in your backblaze account, and the second parameter is the folder where the files to be uploaded is located.
+
 
 ### AWS S3
 
