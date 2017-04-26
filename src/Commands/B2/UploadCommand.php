@@ -42,20 +42,18 @@ class UploadCommand extends Command
         }
 
         $output->writeln("reading files to upload: "  . $folder);
-
         $output->writeln('Connecting to BackBlaze using account_id: ' . $account_id);
 
-        try{
+        $b2_client = new Client($account_id, $application_key);
 
-            $b2_client = new Client($account_id, $application_key);
+        // get all files on destination folder
+        $files_to_upload = scandir($folder);
 
-            // get all files on destination folder
-            $files_to_upload = scandir($folder);
+        foreach($files_to_upload as $file_to_upload){
 
-            foreach($files_to_upload as $file_to_upload){
-
-                if (!in_array($file_to_upload,ExcludedContents::get())){
-
+            if (!in_array($file_to_upload,ExcludedContents::get())){
+                    try{
+                    
                         if(!$b2_client->fileExists(['BucketName' => $bucket_name,'FileName' => $file_to_upload,]))
                         {           
                             $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
@@ -70,14 +68,16 @@ class UploadCommand extends Command
                         }else
                             $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
                                 . ' Skipped, already exists : <info>' . $file_to_upload . '</info>');
-                }
-            }
-        }
-        catch(\Exception $e){
-            $output->writeln("Error: " . $e->getMessage());            
-        }
-
-            $output->writeln("Success!");
-    }
+                    }
+                    catch(\Exception $e){
+                            $output->writeln("Error: " . $e->getMessage()); 
+                            sleep(5);
+                            continue;           
+                    }
+            } // if
+        } // foreach
+        
+        $output->writeln("Success!");
+    } // execute
 
 }
