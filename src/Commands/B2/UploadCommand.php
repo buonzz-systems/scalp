@@ -53,12 +53,21 @@ class UploadCommand extends Command
         foreach($files_to_upload as $file_to_upload){
 
             if (!in_array($file_to_upload,ExcludedContents::get())){
-                $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . ' Uploading : <info>' . $file_to_upload . '</info>');            
-                 $file = $b2_client->upload([
-                    'BucketName' => $bucket_name,
-                    'FileName' => $file_to_upload,
-                    'Body' => fopen($folder . "/" . $file_to_upload, 'r')
-                ]);
+
+                    if(!$b2_client->fileExists(['BucketName' => $bucket_name,'FileName' => $file_to_upload,]))
+                    {           
+                        $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
+                            . ' Uploading : <info>' . $file_to_upload . '</info>');
+
+                         $file = $b2_client->upload([
+                            'BucketName' => $bucket_name,
+                            'FileName' => $file_to_upload,
+                            'Body' => fopen($folder . "/" . $file_to_upload, 'r')
+                        ]);
+
+                    }else
+                        $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
+                            . ' Skipped, already exists : <info>' . $file_to_upload . '</info>');
             }
         }
 
