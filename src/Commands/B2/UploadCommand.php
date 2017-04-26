@@ -45,33 +45,39 @@ class UploadCommand extends Command
 
         $output->writeln('Connecting to BackBlaze using account_id: ' . $account_id);
 
-        $b2_client = new Client($account_id, $application_key);
+        try{
 
-        // get all files on destination folder
-        $files_to_upload = scandir($folder);
+            $b2_client = new Client($account_id, $application_key);
 
-        foreach($files_to_upload as $file_to_upload){
+            // get all files on destination folder
+            $files_to_upload = scandir($folder);
 
-            if (!in_array($file_to_upload,ExcludedContents::get())){
+            foreach($files_to_upload as $file_to_upload){
 
-                    if(!$b2_client->fileExists(['BucketName' => $bucket_name,'FileName' => $file_to_upload,]))
-                    {           
-                        $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
-                            . ' Uploading : <info>' . $file_to_upload . '</info>');
+                if (!in_array($file_to_upload,ExcludedContents::get())){
 
-                         $file = $b2_client->upload([
-                            'BucketName' => $bucket_name,
-                            'FileName' => $file_to_upload,
-                            'Body' => fopen($folder . "/" . $file_to_upload, 'r')
-                        ]);
+                        if(!$b2_client->fileExists(['BucketName' => $bucket_name,'FileName' => $file_to_upload,]))
+                        {           
+                            $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
+                                . ' Uploading : <info>' . $file_to_upload . '</info>');
 
-                    }else
-                        $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
-                            . ' Skipped, already exists : <info>' . $file_to_upload . '</info>');
+                             $file = $b2_client->upload([
+                                'BucketName' => $bucket_name,
+                                'FileName' => $file_to_upload,
+                                'Body' => fopen($folder . "/" . $file_to_upload, 'r')
+                            ]);
+
+                        }else
+                            $output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" 
+                                . ' Skipped, already exists : <info>' . $file_to_upload . '</info>');
+                }
             }
         }
+        catch(\Exception $e){
+            $output->writeln("Error: " . $e->getMessage());            
+        }
 
-         $output->writeln("Success!");
+            $output->writeln("Success!");
     }
 
 }
