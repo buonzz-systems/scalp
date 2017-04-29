@@ -45,7 +45,8 @@ $config_items = array(
                         'INPUT_FOLDER' => './',
                         'OUTPUT_FOLDER' => './dist',
                         'LOG_FOLDER' => './',
-                        'THUMB_PERCENT_RESIZE' => 10
+                        'THUMB_PERCENT_RESIZE' => 10,
+                        'TIMEZONE' => 'UTC'
                         );
 
 try{
@@ -63,6 +64,9 @@ try{
   foreach($config_items as $k=>$v)
         putenv($k . '=' . $v);
 }
+
+  // set the timezone after reading the one in .env file
+  date_default_timezone_set(getenv('TIMEZONE'));
 
   $command = new ExtractCommand();
 
