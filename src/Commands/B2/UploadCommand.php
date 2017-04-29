@@ -70,7 +70,15 @@ class UploadCommand extends Command
                                 . ' Skipped, already exists : <info>' . $file_to_upload . '</info>');
                     }
                     catch(\Exception $e){
-                            $output->writeln("Error: " . $e->getMessage()); 
+                            $msg = $e->getMessage();
+
+                            if($msg == 'Received error from B2: Authorization token has expired')
+                            {
+                                $output->writeln("Error: Authorization token has expired. restart the app");
+                                exit; 
+                            }
+
+                            $output->writeln("Error: " . $msg); 
                             sleep(5);
                             continue;           
                     }
