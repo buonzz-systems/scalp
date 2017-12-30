@@ -2,6 +2,7 @@
 <?php
 
 date_default_timezone_set("UTC");
+ini_set ('gd.jpeg_ignore_warning', 1);
 
 $files = array(
   __DIR__ . '/../../vendor/autoload.php',
