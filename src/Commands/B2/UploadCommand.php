@@ -13,6 +13,9 @@ use ChrisWhite\B2\Bucket;
 
 class UploadCommand extends Command
 {
+
+    private $base_folder;
+
     protected function configure()
     {
         $this
@@ -32,6 +35,7 @@ class UploadCommand extends Command
     {
         
         $folder = $input->getArgument('folder');
+        $this->base_folder = $folder;
         $account_id = getenv('B2_ACCOUNT_ID');
         $application_key = getenv('B2_APPLICATION_KEY');
         $bucket_name = $input->getArgument('bucket');
@@ -92,8 +96,8 @@ class UploadCommand extends Command
     function compare_time($a, $b)
     {
 
-        $timeA = filemtime($a);
-        $timeB = filemtime($b);
+        $timeA = filemtime($this->base_folder . "/".$a);
+        $timeB = filemtime($this->base_folder . "/".$b);
 
         if($timeA == $timeB) return 0;
 
