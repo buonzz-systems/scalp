@@ -16,8 +16,8 @@ class RecentMediaFilesList {
 			$items2[md5($file2)] = filemtime($file2);
 		}
 
-		$sorted_array = arsort($items2);
-		$sorted_keys =  array_keys($sorted_array);
+		arsort($items2);
+		$sorted_keys =  array_keys($items2);
 
 		$output = [];
 
