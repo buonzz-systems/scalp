@@ -4,14 +4,28 @@ class RecentMediaFilesList {
 
 	public static function get($folder){
 		$orig_files = MediaFilesList::get($folder);
-		$items = [];
+		$items1 = [];
+		$items2 = [];
 
-		foreach($orig_files as $file){
-			$item[$file] = filemtime($file);
+		foreach($orig_files as $file1)
+		{
+			$items1[md5($file)] = $file1;
+		}
+
+		foreach($orig_files as $file2){
+			$items2[md5($file2)] = filemtime($file2);
 		}
 
 		$sorted_array = arsort($items);
-		return array_keys($sorted_array);
+		$sorted_keys =  array_keys($sorted_array);
+
+		$output = [];
+
+		foreach($sorted_keys as $key){
+			$output[] = $items1[$key];
+		}
+
+		return $output;
 	}// get
 
 }
