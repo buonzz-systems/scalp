@@ -48,7 +48,7 @@ class UploadCommand extends Command
 
         // get all files on destination folder
         $files_to_upload = scandir($folder);
-        usort($files_to_upload, $this->compare_time);
+        usort($files_to_upload, [$this,'compare_time']);
 
         foreach($files_to_upload as $file_to_upload){
 
