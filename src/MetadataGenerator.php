@@ -29,7 +29,7 @@ class MetadataGenerator extends BaseGenerator{
 
             	$filename = $info->file_contents_hash . ".json";
 	            $this->output->writeln( "[ ". date("Y-m-d H:i:s") . " ]" . '<comment>'. 
-                        $filename .  '</comment> metadata extracted');
+                        $file->getPath() . "/" . $file->getFilename() .  '</comment> metadata extracted');
 	            file_put_contents($this->output_folder . '/'. $filename, $data);
         	}
             catch(\Exception $e){
