@@ -1,7 +1,7 @@
 <?php namespace Buonzz\Scalp;
 
 use Buonzz\Scalp\Analyzer;
-use Buonzz\Scalp\MediaFilesList;
+use Buonzz\Scalp\RecentMediaFilesList;
 use Buonzz\Scalp\ExcludedContents;
 
 class BaseGenerator{
@@ -21,7 +21,7 @@ class BaseGenerator{
 	public function generate(){
 
 		$this->analyzer = new Analyzer();
-		$this->files = MediaFilesList::get($this->input_folder);
+		$this->files = RecentMediaFilesList::get($this->input_folder);
 		$this->output_file_list = [];
 
 		if(file_exists($this->output_folder . '/'. "files.json"))
