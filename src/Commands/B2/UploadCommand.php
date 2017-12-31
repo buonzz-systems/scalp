@@ -48,6 +48,7 @@ class UploadCommand extends Command
 
         // get all files on destination folder
         $files_to_upload = scandir($folder);
+        usort($files_to_upload, $this->compare_time);
 
         foreach($files_to_upload as $file_to_upload){
 
@@ -87,5 +88,16 @@ class UploadCommand extends Command
         
         $output->writeln("Success!");
     } // execute
+
+    function compare_time($a, $b)
+    {
+
+        $timeA = filemtime($a);
+        $timeB = filemtime($b);
+
+        if($timeA == $timeB) return 0;
+
+        return ($timeA < $timeB) ? -1 : 1;
+    }
 
 }
