@@ -9,7 +9,7 @@ class RecentMediaFilesList {
 
 		foreach($orig_files as $file1)
 		{
-			$items1[md5($file)] = $file1;
+			$items1[md5($file1)] = $file1;
 		}
 
 		foreach($orig_files as $file2){
