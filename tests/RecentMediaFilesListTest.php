@@ -1,5 +1,7 @@
 <?php 
 
+use Buonzz\Scalp\RecentMediaFilesList;
+
 class RecentMediaFilesListTest extends PHPUnit_Framework_TestCase{
 	
   public function testSort(){
