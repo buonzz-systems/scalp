@@ -56,7 +56,7 @@ class UploadCommand extends Command
 
         foreach($files_to_upload as $file_to_upload){
 
-            if (!in_array($file_to_upload,ExcludedContents::get())){
+            if (!in_array($file_to_upload,ExcludedContents::get()) || $file_to_upload == 'files.json'){
                     try{
                     
                         if(!$b2_client->fileExists(['BucketName' => $bucket_name,'FileName' => $file_to_upload,]))
