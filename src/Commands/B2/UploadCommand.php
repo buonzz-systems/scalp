@@ -13,6 +13,9 @@ use ChrisWhite\B2\Bucket;
 
 class UploadCommand extends Command
 {
+
+    private $base_folder;
+
     protected function configure()
     {
         $this
@@ -32,6 +35,7 @@ class UploadCommand extends Command
     {
         
         $folder = $input->getArgument('folder');
+        $this->base_folder = $folder;
         $account_id = getenv('B2_ACCOUNT_ID');
         $application_key = getenv('B2_APPLICATION_KEY');
         $bucket_name = $input->getArgument('bucket');
@@ -48,6 +52,7 @@ class UploadCommand extends Command
 
         // get all files on destination folder
         $files_to_upload = scandir($folder);
+        usort($files_to_upload, [$this,'compare_time']);
 
         foreach($files_to_upload as $file_to_upload){
 
@@ -87,5 +92,16 @@ class UploadCommand extends Command
         
         $output->writeln("Success!");
     } // execute
+
+    function compare_time($a, $b)
+    {
+
+        $timeA = filemtime($this->base_folder . "/".$a);
+        $timeB = filemtime($this->base_folder . "/".$b);
+
+        if($timeA == $timeB) return 0;
+
+        return ($timeA < $timeB) ? -1 : 1;
+    }
 
 }
