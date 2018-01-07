@@ -71,7 +71,7 @@ try{
 
   $command = new ExtractCommand();
 
-  $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.1.1");
+  $application = new Application("Scalp Metadata Extraction Tool by Darwin Biler", "v2.1.2");
 
   $application->add(new CreateThumbnailCommand);
   $application->add(new GenerateCommand);
