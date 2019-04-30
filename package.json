@@ -1,6 +1,6 @@
 {
   "name": "scalp",
-  "description": "Command line tool to Analyze and store your Media file's metadata \"",
+  "description": "Command line tool to Analyze and store your Media file's metadata",
   "version": "0.0.1",
   "author": "Darwin Biler @buonzz",
   "bin": {
