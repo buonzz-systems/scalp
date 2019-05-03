@@ -19,23 +19,23 @@ class ExtractCommand extends Command {
 
 	const walker = walk.walk(input_folder, walk_options);
 
-	walker.on("file", function (root, fileStats, next) {
+	walker.on("file", (root, fileStats, next) => {
 
 	    let absPath =  path.join(root, fileStats.name);
 	    let ext = path.extname(fileStats.name).toLowerCase();
 
-	    console.log(absPath);
+	    this.log(absPath);
 
 	    next();
 	});
 
-	walker.on("errors", function (root, nodeStatsArray, next) {
-	    console.log("error")
+	walker.on("errors", (root, nodeStatsArray, next) => {
+	    this.log("error")
 	  next();
 	});
 
-	walker.on("end", function () {
-		console.log("Done");
+	walker.on("end", () => {
+		this.log("Done");
 	});
 
   } // run
